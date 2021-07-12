@@ -14,9 +14,22 @@ module.exports = {
     },
     getCategorybyID: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT id, categoryName as category, image FROM category WHERE ID = ${id}`, (error, result) => {
+            connection.query('SELECT c.id, c.categoryName as category, c.image FROM category c WHERE c.id = ?', id, (error, result) => {
                 if (!error) {
                     resolve(result)
+                    // FROM products p INNER JOIN products p ON p.categoryId = c.id
+                } else {
+                    reject((error))
+                }
+            })
+        })
+    },
+    getProductbyCategory: (id) => {
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT c.id, c.categoryName as category, c.image, p.* FROM category c INNER JOIN products p ON c.id = p.categoryId WHERE c.id = ?', id, (error, result) => {
+                if (!error) {
+                    resolve(result)
+                    // FROM products p INNER JOIN products p ON p.categoryId = c.id
                 } else {
                     reject((error))
                 }

@@ -16,6 +16,7 @@ module.exports = {
             const nextPage = page === total ? total : page + 1;
             console.log(offset);
             console.log(result);
+            console.log(total)
             product.getAllProduct(search, sortBy, sort, offset, limit)
                 .then(data => {
                     let pageDetail = {
@@ -33,8 +34,8 @@ module.exports = {
                     }
                 })
                 .catch(error => {
-                    helper.response(res, null, 404, "Data is not not found");
-                    console.log(error);
+                    helper.response(res, null, 404, error);
+                    // console.log(error);
                 });
         })
         .catch(error => {
@@ -60,7 +61,6 @@ module.exports = {
             name: req.body.name,
             brand: req.body.brand,
             description: req.body.description,
-            // SKU: req.body.SKU,
             categoryId: req.body.categoryId,
             price: req.body.price,
             createdAt: new Date()
@@ -68,7 +68,6 @@ module.exports = {
         product.addProduct(data)
             .then(() => {
                 helper.response(res, "Succes input data", data, 200);
-                // console.log(result);
             })
             .catch((error) => {
                 helper.response(res, "Error input data", null, 410);
@@ -81,26 +80,26 @@ module.exports = {
             name: req.body.name,
             description: req.body.description,
             price: req.body.price,
-            // modifiedAt: new Date()
+            modifiedAt: new Date()
         }
         product.updateProduct(Number(id), data)
             .then((result) => {
-                helper.response(res, "Success update data", result)
+                helper.response(res, "Success update data")
             })
             .catch((err) => {
                 console.log(err)
-                helper.response(res, null, 404, "Id Product for update No found")
+                helper.response(res, null, 404, err)
             })
     },
+    
     deleteProduct: (req, res) => {
         const id = req.params.id
         product.deleteProduct(Number(id))
             .then((result) => {
-                helper.response(res, "Success delete product", result)
+                helper.response(res, "Success delete product")
             })
             .catch((err) => {
-                console.log(err)
-                helper.response(res, null, 404, "Id Product for delete No found")
+                helper.response(res, 404, err)
             })
     }
 }

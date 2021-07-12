@@ -2,27 +2,30 @@ const orderSeller = require("../models/orderSeller");
 const helper = require("../helper/response");
 
 module.exports = {
-    // getCategory: (req, res) => {
-    //     category.getAllCategory()
-    //         .then(result => {
-    //             helper.response(res, result)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //             helper.response(res, null, 404, "Data Not Found")
-    //         })
-    // },
-    // getCategorybyID: (req, res) => {
-    //     const id = req.params.id
-    //     category.getCategorybyID(Number(id))
-    //         .then(result => {
-    //             helper.response(res, result)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //             helper.response(res, null, 404, "Data Not Found")
-    //         })
-    // },
+    getOrder: (req, res) => {
+        const search = req.query.search || ''
+        const sortBy = req.query.sortBy || 'id'
+        const sort = req.query.sort || 'ASC'
+        orderSeller.getAllOrder(search, sortBy, sort)
+            .then(result => {
+                helper.response(res, result)
+            })
+            .catch((err) => {
+                console.log(err)
+                helper.response(res, null, 404, err)
+            })
+    },
+    getOrderbyID: (req, res) => {
+        const id = req.params.id
+        orderSeller.getOrderbyID(Number(id))
+            .then(result => {
+                helper.response(res, result)
+            })
+            .catch((err) => {
+                console.log(err)
+                helper.response(res, null, 404, err)
+            })
+    },
     addOrder: (req, res) => {
         const data = {
             status_order: req.body.status_order,
@@ -47,7 +50,7 @@ module.exports = {
         }
         orderSeller.updateOrder(Number(id), data)
             .then((result) => {
-                helper.response(res, "Success update order", result)
+                helper.response(res, "Success update order")
             })
             .catch((err) => {
                 console.log(err)
@@ -58,7 +61,7 @@ module.exports = {
         const id = req.params.id
         orderSeller.deleteOrder(Number(id))
             .then((result) => {
-                helper.response(res, "Success delete order", result)
+                helper.response(res, "Success delete order")
             })
             .catch((err) => {
                 console.log(err)

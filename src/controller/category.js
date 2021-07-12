@@ -15,23 +15,26 @@ module.exports = {
     getCategorybyID: (req, res) => {
         const id = req.params.id
         category.getCategorybyID(Number(id))
-            .then(result => {
-                helper.response(res, result)
+            .then((result) => {
+                category.getProductbyCategory(Number(id))
+                .then(data => {
+                    helper.response(res, result, data)
+                })
             })
             .catch((err) => {
+                helper.response(res, null, 404, 'Data Not Found')
                 console.log(err)
-                helper.response(res, null, 404, "Data Not Found")
             })
     },
     addCategory: (req, res) => {
         const data = {
-            name: req.body.categoryName,
+            categoryName: req.body.categoryName,
+            image: req.body.image,
             createdAt: new Date()
         }
         category.addCategory(data)
             .then(() => {
                 helper.response(res, "Succes input category", data, 200);
-                // console.log(result);
             })
             .catch((error) => {
                 helper.response(res, "Error input category", null, 410);
@@ -41,16 +44,16 @@ module.exports = {
     updateCategory: (req, res) => {
         const id = req.params.id
         const data = {
-            name: req.body.categoryName,
+            categoryName: req.body.categoryName,
             modifiedAt: new Date()
         }
         category.updateCategory(Number(id), data)
             .then((result) => {
-                helper.response(res, "Success update category", result)
+                helper.response(res, "Success update category")
             })
             .catch((err) => {
                 console.log(err)
-                helper.response(res, null, 404, "Id category for update No found")
+                helper.response(res, null, 404, err)
             })
     },
     deleteCategory: (req, res) => {
@@ -58,7 +61,7 @@ module.exports = {
         category
             .deleteCategory(Number(id))
             .then((result) => {
-                helper.response(res, "Success delete category", result)
+                helper.response(res, "Success delete category")
             })
             .catch((err) => {
                 console.log(err)

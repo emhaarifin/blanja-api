@@ -13,9 +13,7 @@ module.exports = {
     getAllProduct: (search, sortBy, sort, offset, limit) => {
         return new Promise((resolve, reject) => {
             connection.query(`SELECT p.*, categoryName as category FROM products p INNER JOIN category c ON c.id = p.categoryId WHERE p.name LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort} LIMIT ?, ?`, [search, offset, limit], (error, result) => {
-                // connection.query(`SELECT p.*, c.name FROM products p INNER JOIN category c ON c.Id = categoryId WHERE p.name LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort} LIMIT ?, ?`, [search, offset, limit], (error, result) => {
                 if (!error) {
-                    // console.log(result)
                     resolve(result);
                 } else {
                     reject(new Error(error));
@@ -26,7 +24,6 @@ module.exports = {
 
     getProductbyID: (id) => {
         return new Promise((resolve, reject) => {
-            // connection.query(`SELECT * FROM products WHERE id = ${id}`, (error, result) => {
                 connection.query(`SELECT p.*, c.categoryName as category FROM products p INNER JOIN category c ON c.id = p.CategoryId WHERE p.id = ${id}`, (error, result) => {
                 if (!error) {
                     resolve(result);
@@ -69,6 +66,6 @@ module.exports = {
                 }
             })
         })
-    }
+    },
 }
 

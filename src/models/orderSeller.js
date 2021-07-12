@@ -1,11 +1,10 @@
 const connection = require("../confiq/db")
 
 module.exports = {
-    getAllCategory: () => {
+    getAllOrder: (search, sortBy, sort) => {
         return new Promise((resolve, reject) => {
             // connection.query(`SELECT id, categoryName as category, image FROM category`, (error, result) => {
-                connection.query(`SELECT o.*, categoryName as category FROM order_seller o INNER JOIN category c ON c.id = p.categoryId WHERE p.name LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort} LIMIT ?, ?`, [search, offset, limit], (error, result) => {
-               
+                connection.query(`SELECT o.*, c.categoryName as category, p.name FROM order_seller o INNER JOIN category c ON c.id = o.categoryId INNER JOIN products p ON p.id = o.productId WHERE o.buyerName LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort}`, search, (error, result) => {
                 if (!error) {
                     resolve(result);
                 } else {
@@ -16,7 +15,7 @@ module.exports = {
     },
     getOrderbyID: (id) => {
         return new Promise((resolve, reject) => {
-            connection.query(`SELECT id, categoryName as category, image FROM category WHERE ID = ${id}`, (error, result) => {
+            connection.query(`SELECT o.*, c.categoryName as category, p.name FROM order_seller o INNER JOIN category c ON c.id = o.categoryId INNER JOIN products p ON p.id = o.productId WHERE o.ID = ?`, id, (error, result) => {
                 if (!error) {
                     resolve(result)
                 } else {
@@ -38,7 +37,7 @@ module.exports = {
     },
     updateOrder: (id, data) => {
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE order_seller SET ? WHERE id = ?', [data, id], (error, result) => {
+            connection.query('UPDATE order_seller o SET ? WHERE o.id = ?', [data, id], (error, result) => {
                 if (!error) {
                     resolve(result)
                 } else {
