@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
-const product = require("../models/product");
-const helper = require("../helper/response");
+const product = require("../../models/product");
+const helper = require("../../helper/response");
+const redis = require("redis");
+const client = redis.createClient();
 
 module.exports = {
   getProduct: (req, res) => {
@@ -16,9 +18,9 @@ module.exports = {
         let total = result[0].TotalProducts;
         const prevPage = page === 1 ? 1 : page - 1;
         const nextPage = page === total ? total : page + 1;
-        console.log(offset);
-        console.log(result);
-        console.log(total);
+        // console.log(offset);
+        // console.log(result);
+        // console.log(total);
         product
           .getAllProduct(search, sortBy, sort, offset, limit)
           .then((data) => {
@@ -37,6 +39,8 @@ module.exports = {
               )}`,
             };
             if (data[0] !== undefined) {
+              client.setex("pageDetail", 60 * 60, JSON.stringify(pageDetail));
+              client.setex("data", 60 * 60, JSON.stringify(data));
               helper.responsePagination(
                 res,
                 "OK",
@@ -45,26 +49,16 @@ module.exports = {
                 pageDetail,
                 data
               );
-              console.log(data);
             } else {
-              helper.responsePagination(
-                res,
-                "Data is not found",
-                404,
-                true,
-                pageDetail,
-                data
-              );
+              helper.responsePagination(res, err, 404, true, pageDetail, data);
             }
           })
           .catch((error) => {
-            helper.response(res, null, 404, "Data is not found");
-            console.log(error, " tes");
+            helper.response(res, null, 404, error);
           });
       })
       .catch((error) => {
-        helper.response(res, null, 404, "Data is not found");
-        console.log(error, "tc");
+        helper.response(res, null, 404, error);
       });
   },
 
@@ -75,8 +69,8 @@ module.exports = {
       .then((result) => {
         helper.response(res, "ok", result);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
         helper.response(res, null, 404, "Not Found");
       });
   },
@@ -97,9 +91,9 @@ module.exports = {
         client.setex(`/products`, 60 * 60, JSON.stringify(data));
         helper.response(res, "Succes input data", data, 200);
       })
-      .catch((error) => {
+      .catch(() => {
         helper.response(res, "Error input data", null, 410);
-        console.log(error);
+        // console.log(error);
       });
   },
   updateProduct: (req, res) => {
@@ -120,7 +114,7 @@ module.exports = {
         helper.response(res, "Success update data");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         helper.response(res, null, 404, err);
       });
   },
