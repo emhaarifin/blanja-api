@@ -6,9 +6,32 @@ const helper = require("../helper/response");
 
 module.exports = {
   hitCacheAllProduct: (req, res, next) => {
+    // const page = parseInt(req.query.page) || 0;
+    // const search = req.query.search || "";
+    // const sortBy = req.query.sortBy || "id";
+    // const sort = req.query.sort || "ASC";
+    // const limit = parseInt(req.query.limit) || 15;
+    // const offset = (page - 1) * limit;
     client.keys("*", function (err, result) {
       console.log(result, "tc");
-      client.mget(["pageDetail", "data"], function (err, result) {
+      client.mget(["pageDetail", `data`], function (err, result) {
+        // let total = result[0];
+        // const prevPage = page === 1 ? 1 : page - 1;
+        // const nextPage = page === total ? total : page + 1;
+        // let pageDetail = {
+        //   total: Math.ceil(total),
+        //   per_page: limit,
+        //   current_page: page,
+        //   totalPage: Math.ceil(total / limit),
+        //   nextLink: `http://localhost:4000${req.originalUrl.replace(
+        //     "page=" + page,
+        //     "page=" + nextPage
+        //   )}`,
+        //   prevLink: `http://localhost:4000${req.originalUrl.replace(
+        //     "page=" + page,
+        //     "page=" + prevPage
+        //   )}`,
+        // };
         if (result[0] !== null && result[1] !== null) {
           const pageDetail = JSON.parse(result[0]);
           const data = JSON.parse(result[1]);

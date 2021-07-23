@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const orderSeller = require("../models/orderSeller");
-const helper = require("../helper/response");
+const orderSeller = require("../../models/v1/orderSeller");
+const helper = require("../../helper/response");
 
 module.exports = {
   getOrder: (req, res) => {

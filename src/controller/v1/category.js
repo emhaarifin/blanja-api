@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-const category = require("../models/category");
-const helper = require("../helper/response");
+const category = require("../../models/v1/category");
+const helper = require("../../helper/response");
 
 module.exports = {
   getCategory: (req, res) => {

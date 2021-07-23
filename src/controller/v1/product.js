@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-const product = require("../models/product");
-const helper = require("../helper/response");
+const product = require("../../models/v1/product");
+const helper = require("../../helper/response");
 
 module.exports = {
   getProduct: (req, res) => {

@@ -1,13 +1,11 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const express = require("express");
 const route = express.Router();
-const product = require("../controller/product");
-const productsV2 = require("../controller/v2/product");
-const redisChace = require("../middleware/redis");
+const product = require("../../controller/v1/product");
 
 route
-  //   .get("/", product.getProduct)
-  .get("/", redisChace.hitCacheAllProduct, productsV2.getProduct)
+  .get("/", product.getProduct)
   .get("/:id", product.getProductbyID)
   .post("/", product.addProduct)
   .put("/:id", product.updateProduct)

@@ -2,11 +2,11 @@
 require("dotenv").config();
 const createError = require("http-errors");
 const cors = require("cors");
+const routeV1 = require("./src/route/v1/index");
+const routeV2 = require("./src/route/v2/index");
 const express = require("express");
 const logger = require("morgan");
-const product = require("./src/route/product");
-const category = require("./src/route/category");
-const orderSeller = require("./src/route/orderSeller");
+
 const port = process.env.DB_PORT;
 const app = express();
 
@@ -31,11 +31,9 @@ app.listen(port, () => {
   console.log("server on using port", port);
 });
 
-app.use("/products", product);
-app.use("/category", category);
-app.use("/orderseller", orderSeller);
-app.use("/profile/seller/product", product);
-
+app.use("/v1", routeV1);
+app.use("/v2", routeV2);
+// app.use("/v1/file", express.static("./uploads"));
 //  catch error and forward to error handler
 app.use(function (req, res, next) {
   next(createError().message);

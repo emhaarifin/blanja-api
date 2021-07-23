@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const connection = require("../confiq/db");
+const connection = require("../../../src/confiq/db");
 
 module.exports = {
   getAllOrder: (search, sortBy, sort) => {

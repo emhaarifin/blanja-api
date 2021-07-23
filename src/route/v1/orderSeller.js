@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 const express = require("express");
 const route = express.Router();
-const orderSeller = require("../controller/orderSeller");
+const orderSeller = require("../../controller/v1/orderSeller");
 
 route
   .get("/", orderSeller.getOrder)
