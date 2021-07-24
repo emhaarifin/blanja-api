@@ -94,7 +94,6 @@ module.exports = {
     product
       .addProduct(data)
       .then(() => {
-        client.setex(`/products`, 60 * 60, JSON.stringify(data));
         helper.response(res, "Succes input data", data, 200);
       })
       .catch((error) => {
