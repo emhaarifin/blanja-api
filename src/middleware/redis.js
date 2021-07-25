@@ -2,51 +2,65 @@
 const redis = require("redis");
 const redis_url = process.env.REDIS_URL || null;
 const client = redis.createClient(redis_url);
-const helper = require("../helper/response");
+const _ = require("lodash");
+// const helper = require("../helper/response");
 
 module.exports = {
   hitCacheAllProduct: (req, res, next) => {
-    // const page = parseInt(req.query.page) || 0;
-    // const search = req.query.search || "";
-    // const sortBy = req.query.sortBy || "id";
-    // const sort = req.query.sort || "ASC";
-    // const limit = parseInt(req.query.limit) || 15;
-    // const offset = (page - 1) * limit;
-    client.keys("*", function (err, result) {
-      console.log(result, "tc");
-      client.mget(["pageDetail", `data`], function (err, result) {
-        // let total = result[0];
-        // const prevPage = page === 1 ? 1 : page - 1;
-        // const nextPage = page === total ? total : page + 1;
-        // let pageDetail = {
-        //   total: Math.ceil(total),
-        //   per_page: limit,
-        //   current_page: page,
-        //   totalPage: Math.ceil(total / limit),
-        //   nextLink: `http://localhost:4000${req.originalUrl.replace(
-        //     "page=" + page,
-        //     "page=" + nextPage
-        //   )}`,
-        //   prevLink: `http://localhost:4000${req.originalUrl.replace(
-        //     "page=" + page,
-        //     "page=" + prevPage
-        //   )}`,
-        // };
-        if (result[0] !== null && result[1] !== null) {
-          const pageDetail = JSON.parse(result[0]);
-          const data = JSON.parse(result[1]);
-          helper.responsePagination(
-            res,
-            "redis nih",
-            200,
-            false,
-            pageDetail,
-            data
+    client.get("data", function (err, result) {
+      if (result !== null) {
+        const data = JSON.parse(result);
+        const page = parseInt(req.query.page) || 1;
+        const searchkey = req.query.search || "";
+        const sortkey = req.query.sortBy || "id";
+        const sortlates = req.query.sort || "ASC";
+
+        //pagination
+        const limit = parseInt(req.query.limit) || 15;
+        const offset = (page - 1) * limit;
+        const endPage = page * limit;
+
+        //sort
+        // //sort
+        const sort = _.orderBy(data, [sortkey], [sortlates]);
+        // redis data
+        let redisData = sort;
+        // search
+        if (searchkey !== null) {
+          const search = sort.filter((e) =>
+            e.name.toLowerCase().includes(searchkey.toLowerCase())
           );
-        } else {
-          next();
+          redisData = search;
         }
-      });
+        let total = data.length;
+        const prevPage = page === 1 ? 1 : page - 1;
+        const nextPage = page === total ? total : page + 1;
+        let pageDetail = {
+          total: Math.ceil(total),
+          per_page: limit,
+          current_page: page,
+          totalPage: Math.ceil(total / limit),
+          nextLink: `http://localhost:4000${req.originalUrl.replace(
+            "page=" + page,
+            "page=" + nextPage
+          )}`,
+          prevLink: `http://localhost:4000${req.originalUrl.replace(
+            "page=" + page,
+            "page=" + prevPage
+          )}`,
+        };
+        // console.log(pageDetail);
+        res.send({
+          message: "get data from redis",
+          code: 200,
+          success: true,
+          pageDetail,
+          data: redisData.slice(offset, endPage), //data di paginasi di sini
+        });
+        // helper.responsePagination(res, "OK", 200, false, pageDetail, data);
+      } else {
+        next();
+      }
     });
   },
 };

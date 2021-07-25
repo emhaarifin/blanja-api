@@ -33,7 +33,7 @@ app.listen(port, () => {
 
 app.use("/v1", routeV1);
 app.use("/v2", routeV2);
-// app.use("/v1/file", express.static("./uploads"));
+app.use("/file", express.static("./uploads"));
 //  catch error and forward to error handler
 app.use(function (req, res, next) {
   next(createError().message);

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const product = require("../../models/v1/product");
+const product = require("../../models/v2/product");
 const helper = require("../../helper/response");
 const redis = require("redis");
 const client = redis.createClient();
@@ -41,8 +41,6 @@ module.exports = {
               )}`,
             };
             if (data[0] !== undefined) {
-              client.setex("pageDetail", 60 * 60, JSON.stringify(pageDetail));
-              client.setex("data", 60 * 60, JSON.stringify(data));
               helper.responsePagination(
                 res,
                 "OK",
@@ -62,6 +60,15 @@ module.exports = {
       .catch((error) => {
         helper.response(res, null, 404, error);
       });
+
+    product
+      .getAllWithRedis()
+      .then((resRedist) => {
+        client.setex("data", 60 * 60, JSON.stringify(resRedist));
+      })
+      .catch((error) => {
+        helper.response(res, null, 404, error);
+      });
   },
 
   getProductbyID: (req, res) => {
@@ -77,22 +84,26 @@ module.exports = {
       });
   },
   addProduct: (req, res) => {
+    // const images = req.files.map((item) => {
+    //   return `${process.env.BASE_URL}/file/${item.filename}`;
+    // });
+    // console.log(images.toString());
+    // console.log(...req.files);
+    // console.log(images.split(" "));
+
     const data = {
       name: req.body.name,
       brand: req.body.brand,
       description: req.body.description,
       stock: req.body.stock,
       categoryId: req.body.categoryId,
-      // image: req.body.image,
       image: `${process.env.BASE_URL}/file/${req.file.filename}`,
       price: req.body.price,
       createdAt: new Date(),
     };
-    console.log(data.image);
     product
       .addProduct(data)
       .then(() => {
-        // client.setex(`/products`, 60 * 60, JSON.stringify(data));
         helper.response(res, "Succes input data", data, 200);
       })
       .catch((err) => {
@@ -108,7 +119,7 @@ module.exports = {
       description: req.body.description,
       stock: req.body.stock,
       categoryId: req.body.categoryId,
-      image: req.body.image,
+      image: `${process.env.BASE_URL}/file/${req.file.filename}`,
       price: req.body.price,
       modifiedAt: new Date(),
     };

@@ -16,7 +16,7 @@ module.exports = {
         let total = result[0].TotalProducts;
         const prevPage = page === 1 ? 1 : page - 1;
         const nextPage = page === total ? total : page + 1;
-        console.log(offset);
+        // console.log(offset);
         console.log(result);
         console.log(total);
         product
@@ -45,7 +45,7 @@ module.exports = {
                 pageDetail,
                 data
               );
-              console.log(data);
+              // console.log(data);
             } else {
               helper.responsePagination(
                 res,
@@ -57,14 +57,14 @@ module.exports = {
               );
             }
           })
-          .catch((error) => {
+          .catch(() => {
             helper.response(res, null, 404, "Data is not found");
-            console.log(error, " tes");
+            // console.log(error, " tes");
           });
       })
-      .catch((error) => {
+      .catch(() => {
         helper.response(res, null, 404, "Data is not found");
-        console.log(error, "tc");
+        // console.log(error, "tc");
       });
   },
 
@@ -75,8 +75,8 @@ module.exports = {
       .then((result) => {
         helper.response(res, "ok", result);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        // console.log(err);
         helper.response(res, null, 404, "Not Found");
       });
   },
@@ -96,9 +96,9 @@ module.exports = {
       .then(() => {
         helper.response(res, "Succes input data", data, 200);
       })
-      .catch((error) => {
+      .catch(() => {
         helper.response(res, "Error input data", null, 410);
-        console.log(error);
+        // console.log(error);
       });
   },
   updateProduct: (req, res) => {
@@ -119,7 +119,7 @@ module.exports = {
         helper.response(res, "Success update data");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         helper.response(res, null, 404, err);
       });
   },
