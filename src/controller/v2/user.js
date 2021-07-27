@@ -36,12 +36,10 @@ module.exports = {
             } else {
               console.log(res, " cek");
               let transporter = nodemailer.createTransport({
-                host: "smtp.gmail.com",
-                port: 323,
-                secure: false, // use SSL
+                service: "gmail", // use SSL
                 auth: {
-                  user: "badkrmaa@gmail.com", // username for your mail server
-                  pass: "Kiddies45", // password
+                  user: "blanja.check@gmail.com", // username for your mail server
+                  pass: "anymxizeuxchgdri", // password
                 },
               });
               let activeEmail = `<div>
@@ -49,9 +47,9 @@ module.exports = {
               <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
               </div>`;
               transporter.sendMail({
-                from: `👻 badkrmaa@gmail.com`, // sender address
+                from: `👻 blanja.check@gmail.com`, // sender address
                 to: data.email, // list of receivers
-                subject: "Activation email ✔", // Subject line
+                subject: "Activation email", // Subject line
                 html: activeEmail, // html body
               });
             }
@@ -75,28 +73,43 @@ module.exports = {
       });
     });
   },
-  login: async (req, res) => {
-    const { email, password } = req.body;
-    const result = await userModels.findUser(email);
-    const user = result[0];
-    bcrypt.compare(password, user.password, function (err, resCompare) {
-      if (!resCompare) {
-        return helpers.response(res, null, 401, { message: "password wrong" });
-      }
-      // generate token
-      jwt.sign(
-        { email: user.email, role: "1" },
-        process.env.SECRET_KEY,
-        { expiresIn: "24h" },
-        function (err, token) {
-          console.log(token);
-          console.log(process.env.SECRET_KEY);
-          delete user.password;
-          user.token = token;
-          helper.response(res, user, 200);
+  login: async (req, res, next) => {
+    try {
+      const checkUser = await users.findUser(req.body.email);
+      if (checkUser.length > 0) {
+        const checkPassword = await bcrypt.compare(
+          req.body.password,
+          checkUser[0].password
+        );
+        if (checkPassword) {
+          const { id, name, roles, avatar } = checkUser[0];
+          const payload = {
+            id,
+            name,
+            roles,
+            avatar,
+            ...checkUser[0],
+          };
+          const token = jwt.sign(payload, process.env.SECRET_KEY, {
+            expiresIn: "60s",
+          });
+          const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
+            expiresIn: "1m",
+          });
+          delete payload.password;
+          payload.token = token;
+          payload.refresh = refreshToken;
+
+          helper.response(res, "Login success", payload, 200);
+        } else {
+          helper.response(res, "Password wrong");
         }
-      );
-    });
+      } else {
+        helper.response(res, "Email not found", 400);
+      }
+    } catch (error) {
+      next(error);
+    }
   },
   activactions: (req, res) => {
     const token = req.params.token;
@@ -107,13 +120,24 @@ module.exports = {
         const email = decode.email;
         users
           .activation(email)
-          .then((result) => {
-            helper.response(res, "Activation Succes", result);
+          .then(() => {
+            helper.response(res, "Activation Succes");
           })
           .catch((error) => {
             helper.response(res, error.message);
           });
       }
     });
+  },
+  logout: (req, res) => {
+    const id = req.params.id;
+    users
+      .logout(id)
+      .then((result) => {
+        helper.response(res, result, "Logout user success");
+      })
+      .catch((err) => {
+        helper.response(res, err.message);
+      });
   },
 };
