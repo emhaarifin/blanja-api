@@ -91,14 +91,14 @@ module.exports = {
             ...checkUser[0],
           };
           const token = jwt.sign(payload, process.env.SECRET_KEY, {
-            expiresIn: "60s",
+            expiresIn: "1h",
           });
           const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
-            expiresIn: "1m",
+            expiresIn: "24h",
           });
           delete payload.password;
           payload.token = token;
-          payload.refresh = refreshToken;
+          payload.refreshToken = refreshToken;
 
           helper.response(res, "Login success", payload, 200);
         } else {
@@ -128,16 +128,5 @@ module.exports = {
           });
       }
     });
-  },
-  logout: (req, res) => {
-    const id = req.params.id;
-    users
-      .logout(id)
-      .then((result) => {
-        helper.response(res, result, "Logout user success");
-      })
-      .catch((err) => {
-        helper.response(res, err.message);
-      });
   },
 };

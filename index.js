@@ -12,20 +12,20 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(logger("dev"));
-app.use((_, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  ); // If needed
-  res.header(
-    "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  ); // If needed
-  res.header("Access-Control-Allow-Credentials", true); // If needed
-  next();
-});
+// app.use((_, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   ); // If needed
+//   res.header(
+//     "Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   ); // If needed
+//   res.header("Access-Control-Allow-Credentials", true); // If needed
+//   next();
+// });
 
 app.listen(port, () => {
   console.log("server on using port", port);
@@ -35,14 +35,17 @@ app.use("/v1", routeV1);
 app.use("/v2", routeV2);
 app.use("/file", express.static("./uploads"));
 //  catch error and forward to error handler
-app.use(function (req, res, next) {
-  next(createError().message);
+
+app.use("*", (req, res, next) => {
+  const error = new createError.NotFound();
+  next(error);
 });
 
-// error handler
-app.use(function (err, req, res) {
-  res.status(err.status || 500);
-  res.send(err.message);
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    message: err.message || "internal server Error",
+  });
 });
 
 module.exports = app;

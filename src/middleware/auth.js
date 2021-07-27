@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 const jwt = require("jsonwebtoken");
+const helper = require("../helper/response");
 
 module.exports = {
   verifyAccess: (req, res, next) => {
@@ -26,8 +28,28 @@ module.exports = {
           return next(error);
         }
       }
-      req.role = decoded.role;
+      req.token = token;
+      req.id = decoded.id;
+      req.roles = decoded.roles;
       next();
     });
+  },
+  custommer: (req, res, next) => {
+    const roles = req.roles;
+    if (roles === "custommer") {
+      return next();
+    }
+    return helper.response(res, "Forbidden Access", 403);
+  },
+  seller: (req, res, next) => {
+    const status = req.status;
+    const roles = req.roles;
+    if ((roles === "seller") & (status === "active")) {
+      return next();
+    } else if (roles !== "seller") {
+      return helper.response(res, "Forbidden Access", 403);
+    }
+
+    return helper.response(res, "Activasi Email", 403);
   },
 };

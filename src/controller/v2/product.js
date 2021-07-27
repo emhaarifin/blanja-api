@@ -126,10 +126,10 @@ module.exports = {
     product
       .updateProduct(Number(id), data)
       .then(() => {
+        client.del("data");
         helper.response(res, "Success update data");
       })
       .catch((err) => {
-        // console.log(err);
         helper.response(res, null, 404, err);
       });
   },
@@ -139,6 +139,7 @@ module.exports = {
     product
       .deleteProduct(Number(id))
       .then(() => {
+        client.del("data");
         helper.response(res, "Success delete product");
       })
       .catch((err) => {

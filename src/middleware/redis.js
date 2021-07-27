@@ -12,8 +12,8 @@ module.exports = {
         const data = JSON.parse(result);
         const page = parseInt(req.query.page) || 1;
         const searchkey = req.query.search || "";
-        const sortkey = req.query.sortBy || "id";
-        const sortlates = req.query.sort || "ASC";
+        const sortBy = req.query.sortBy || "id";
+        const sortkey = req.query.sort || "ASC";
 
         //pagination
         const limit = parseInt(req.query.limit) || 15;
@@ -22,7 +22,7 @@ module.exports = {
 
         //sort
         // //sort
-        const sort = _.orderBy(data, [sortkey], [sortlates]);
+        const sort = _.orderBy(data, [sortBy], [sortkey]);
         // redis data
         let redisData = sort;
         // search
@@ -49,7 +49,6 @@ module.exports = {
             "page=" + prevPage
           )}`,
         };
-        // console.log(pageDetail);
         res.send({
           message: "get data from redis",
           code: 200,
