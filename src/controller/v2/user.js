@@ -189,6 +189,25 @@ module.exports = {
       next(error);
     }
   },
+  logout: (req, res) => {
+    const { userId, token } = req;
+    client.get(userId, (err, data) => {
+      if (err) {
+        return helper.response(res, err.message, null, 500);
+      }
+      if (data) {
+        const parseData = JSON.parse(data);
+        client.setex(userId, "1h", JSON.stringify(parseData));
+        return helper.response(res, "Logout succes", 200);
+      }
+
+      const blacklistData = {
+        [userId]: [token],
+      };
+      client.setex(userId, "1h", JSON.stringify(blacklistData));
+      return helper.response(res, "Logout succes", 200);
+    });
+  },
   activactions: (req, res) => {
     const token = req.params.token;
     jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {

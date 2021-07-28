@@ -35,6 +35,27 @@ module.exports = {
       next();
     });
   },
+  verifyToken: (req, res, next) => {
+    const token = req.headers.authorization;
+    if (!token) {
+      const error = new Error("no token provided");
+      error.code = 403;
+      return next(error);
+    }
+    const result = token.split(" ")[1];
+    console.log(result);
+    jwt.verify(result, process.env.SECRET_KEY, function (err, decodedToken) {
+      if (err) {
+        const error = err.message;
+        error.status = 401;
+        return next(error);
+      }
+      req.userId = decodedToken.id;
+      req.tokenExp = decodedToken.exp;
+      req.token = token;
+      next();
+    });
+  },
   custommer: (req, res, next) => {
     const roles = req.roles;
     if (roles === "custommer") {
