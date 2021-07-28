@@ -16,7 +16,6 @@ module.exports = {
     }
     bcrypt.genSalt(10, function (err, salt) {
       bcrypt.hash(password, salt, function (err, hash) {
-        // Store hash in your password DB.
         const data = {
           id: uuidv4(),
           name: name,
@@ -47,7 +46,7 @@ module.exports = {
               <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
               </div>`;
               transporter.sendMail({
-                from: `👻 blanja.check@gmail.com`, // sender address
+                from: `Blanja`, // sender address
                 to: data.email, // list of receivers
                 subject: "Activation email", // Subject line
                 html: activeEmail, // html body
@@ -62,13 +61,92 @@ module.exports = {
 
             helper.response(
               res,
-              "Register Succues and need activation",
+              "Register Success and need activation",
               data,
               200
             );
           })
           .catch(() => {
             helper.response(res, "internal server error", null, 500);
+          });
+      });
+    });
+  },
+  registerSeller: async (req, res) => {
+    const { name, email, password, store_name, phone_number } = req.body;
+    const user = await users.findUser(email);
+    console.log(user, "cek user");
+    if (user.length > 0) {
+      return helper.response(res, "email sudah ada", null, 401);
+    }
+    bcrypt.genSalt(10, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
+        const data = {
+          id: uuidv4(),
+          name: name,
+          email: email,
+          roles: "seller",
+          phone_number: phone_number,
+          password: hash,
+          status: "inactive",
+        };
+
+        jwt.sign(
+          { email: data.email },
+          process.env.SECRET_KEY,
+          { expiresIn: "1h" },
+          (err, res) => {
+            if (err) {
+              res.send("failed");
+            } else {
+              console.log(res, " cek");
+              let transporter = nodemailer.createTransport({
+                service: "gmail", // use SSL
+                auth: {
+                  user: "blanja.check@gmail.com", // username for your mail server
+                  pass: "anymxizeuxchgdri", // password
+                },
+              });
+              let activeEmail = `<div>
+              <p>Follow link for activation</p>
+              <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
+              </div>`;
+              transporter.sendMail({
+                from: `Blanja`, // sender address
+                to: data.email, // list of receivers
+                subject: "Activation email", // Subject line
+                html: activeEmail, // html body
+              });
+            }
+          }
+        );
+        users
+          .register(data)
+          .then(async () => {
+            delete data.password;
+            const store = {
+              id: uuidv4(),
+              store_name: store_name,
+              user_id: data.id,
+            };
+            await users
+              .addStore(store)
+              .then(() => {
+                helper.response(
+                  res,
+                  "Register Success and need activation",
+                  data,
+                  200
+                );
+              })
+              .catch((error) => {
+                helper.response(res, error, null, 500);
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            helper.response(res, error, null, 500);
           });
       });
     });

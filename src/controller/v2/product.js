@@ -3,8 +3,9 @@ const product = require("../../models/v2/product");
 const helper = require("../../helper/response");
 const redis = require("redis");
 const client = redis.createClient();
-// const path = require("path");
-// const fs = require("fs");
+const path = require("path");
+const fs = require("fs");
+const dirPath = path.join(__dirname, "../../../uploads");
 
 module.exports = {
   getProduct: (req, res) => {
@@ -76,21 +77,14 @@ module.exports = {
     product
       .getProductbyID(id)
       .then((result) => {
+        client.setex(`product/${id}`, 60 * 60, JSON.stringify(result));
         helper.response(res, "ok", result);
       })
       .catch(() => {
-        // console.log(err);
         helper.response(res, null, 404, "Not Found");
       });
   },
   addProduct: (req, res) => {
-    // const images = req.files.map((item) => {
-    //   return `${process.env.BASE_URL}/file/${item.filename}`;
-    // });
-    // console.log(images.toString());
-    // console.log(...req.files);
-    // console.log(images.split(" "));
-
     const data = {
       name: req.body.name,
       brand: req.body.brand,
@@ -107,8 +101,15 @@ module.exports = {
         helper.response(res, "Succes input data", data, 200);
       })
       .catch((err) => {
-        helper.response(res, err, null, 410);
-        console.log(error);
+        console.log(dirPath, "cek");
+        console.log(req.file, "cek file");
+        fs.unlink(`${dirPath}/${req.file.filename}`, (err) => {
+          if (err) {
+            console.log("Error unlink image product!" + err);
+          }
+        });
+
+        helper.response(res, err.message, null, 410);
       });
   },
   updateProduct: (req, res) => {

@@ -30,6 +30,7 @@ module.exports = {
       }
       req.token = token;
       req.id = decoded.id;
+      req.status = decoded.status;
       req.roles = decoded.roles;
       next();
     });
@@ -44,12 +45,12 @@ module.exports = {
   seller: (req, res, next) => {
     const status = req.status;
     const roles = req.roles;
+    if (status !== "active") {
+      return helper.response(res, "Need Activasi Email", 403);
+    }
     if ((roles === "seller") & (status === "active")) {
       return next();
-    } else if (roles !== "seller") {
-      return helper.response(res, "Forbidden Access", 403);
     }
-
-    return helper.response(res, "Activasi Email", 403);
+    return helper.response(res, "Forbidden Access", 403);
   },
 };

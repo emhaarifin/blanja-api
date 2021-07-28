@@ -3,7 +3,7 @@ const redis = require("redis");
 const redis_url = process.env.REDIS_URL || null;
 const client = redis.createClient(redis_url);
 const _ = require("lodash");
-// const helper = require("../helper/response");
+const helper = require("../helper/response");
 
 module.exports = {
   hitCacheAllProduct: (req, res, next) => {
@@ -61,6 +61,29 @@ module.exports = {
         next();
       }
     });
+  },
+
+  hitCacheProductId: (req, res, next) => {
+    const id = req.params.id;
+    client.get(`product/${id}`, function (err, data) {
+      // Reply is null when the key is missing
+      if (data !== null) {
+        const result = JSON.parse(data);
+        // console.log('result redis get', result);
+        return helper.response(res, "Data from redis", result);
+      }
+
+      next();
+    });
+  },
+  clearRedisProduct: (req, res, next) => {
+    client.del("data");
+    next();
+  },
+  clearRedisProductById: (req, res, next) => {
+    const id = req.params.id;
+    client.del(`product/${id}`);
+    next();
   },
 };
 

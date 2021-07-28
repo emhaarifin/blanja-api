@@ -13,6 +13,17 @@ module.exports = {
       });
     });
   },
+  addStore: (store) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`INSERT INTO stores set ?`, store, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
+        }
+      });
+    });
+  },
   findUser: (email) => {
     return new Promise((resolve, reject) => {
       connection.query(
