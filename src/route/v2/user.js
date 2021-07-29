@@ -9,7 +9,7 @@ route
   .post("/login", user.login)
   .post("/register/custommer", user.registerCus)
   .post("/register/seller", user.registerSeller)
-  .post("/logout", auth.verifyToken, user.logout)
+  .post("/refreshtoken", user.refreshToken)
   .get("/actived/:token", user.activactions);
 
 module.exports = route;

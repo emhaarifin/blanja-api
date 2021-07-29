@@ -10,7 +10,6 @@ module.exports = {
   registerCus: async (req, res) => {
     const { name, email, password } = req.body;
     const user = await users.findUser(email);
-    console.log(user, "cek user");
     if (user.length > 0) {
       return helper.response(res, "email sudah ada", null, 401);
     }
@@ -24,39 +23,37 @@ module.exports = {
           password: hash,
           status: "inactive",
         };
-
-        jwt.sign(
-          { email: data.email },
-          process.env.SECRET_KEY,
-          { expiresIn: "1h" },
-          (err, res) => {
-            if (err) {
-              res.send("failed");
-            } else {
-              console.log(res, " cek");
-              let transporter = nodemailer.createTransport({
-                service: "gmail", // use SSL
-                auth: {
-                  user: "blanja.check@gmail.com", // username for your mail server
-                  pass: "anymxizeuxchgdri", // password
-                },
-              });
-              let activeEmail = `<div>
-              <p>Follow link for activation</p>
-              <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
-              </div>`;
-              transporter.sendMail({
-                from: `Blanja`, // sender address
-                to: data.email, // list of receivers
-                subject: "Activation email", // Subject line
-                html: activeEmail, // html body
-              });
-            }
-          }
-        );
         users
           .register(data)
           .then(() => {
+            jwt.sign(
+              { email: data.email },
+              process.env.SECRET_KEY,
+              { expiresIn: "1h" },
+              (err, res) => {
+                if (err) {
+                  res.send("failed");
+                } else {
+                  let transporter = nodemailer.createTransport({
+                    service: "gmail", // use SSL
+                    auth: {
+                      user: "blanja.check@gmail.com", // username for your mail server
+                      pass: "anymxizeuxchgdri", // password
+                    },
+                  });
+                  let activeEmail = `<div>
+                  <p>Follow link for activation</p>
+                  <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
+                  </div>`;
+                  transporter.sendMail({
+                    from: `Blanja`, // sender address
+                    to: data.email, // list of receivers
+                    subject: "Activation email", // Subject line
+                    html: activeEmail, // html body
+                  });
+                }
+              }
+            );
             delete data.password;
 
             helper.response(
@@ -75,7 +72,6 @@ module.exports = {
   registerSeller: async (req, res) => {
     const { name, email, password, store_name, phone_number } = req.body;
     const user = await users.findUser(email);
-    console.log(user, "cek user");
     if (user.length > 0) {
       return helper.response(res, "email sudah ada", null, 401);
     }
@@ -90,40 +86,38 @@ module.exports = {
           password: hash,
           status: "inactive",
         };
-
-        jwt.sign(
-          { email: data.email },
-          process.env.SECRET_KEY,
-          { expiresIn: "1h" },
-          (err, res) => {
-            if (err) {
-              res.send("failed");
-            } else {
-              console.log(res, " cek");
-              let transporter = nodemailer.createTransport({
-                service: "gmail", // use SSL
-                auth: {
-                  user: "blanja.check@gmail.com", // username for your mail server
-                  pass: "anymxizeuxchgdri", // password
-                },
-              });
-              let activeEmail = `<div>
-              <p>Follow link for activation</p>
-              <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
-              </div>`;
-              transporter.sendMail({
-                from: `Blanja`, // sender address
-                to: data.email, // list of receivers
-                subject: "Activation email", // Subject line
-                html: activeEmail, // html body
-              });
-            }
-          }
-        );
         users
           .register(data)
           .then(async () => {
             delete data.password;
+            jwt.sign(
+              { email: data.email },
+              process.env.SECRET_KEY,
+              { expiresIn: "1h" },
+              (err, res) => {
+                if (err) {
+                  res.send("failed");
+                } else {
+                  let transporter = nodemailer.createTransport({
+                    service: "gmail", // use SSL
+                    auth: {
+                      user: "blanja.check@gmail.com", // username for your mail server
+                      pass: "anymxizeuxchgdri", // password
+                    },
+                  });
+                  let activeEmail = `<div>
+                <p>Follow link for activation</p>
+                <a href="http://localhost:4000/v2/auth/actived/${res}">click</a>
+                </div>`;
+                  transporter.sendMail({
+                    from: `Blanja`, // sender address
+                    to: data.email, // list of receivers
+                    subject: "Activation email", // Subject line
+                    html: activeEmail, // html body
+                  });
+                }
+              }
+            );
             const store = {
               id: uuidv4(),
               store_name: store_name,
@@ -141,11 +135,9 @@ module.exports = {
               })
               .catch((error) => {
                 helper.response(res, error, null, 500);
-                console.log(error);
               });
           })
           .catch((error) => {
-            console.log(error);
             helper.response(res, error, null, 500);
           });
       });
@@ -189,23 +181,21 @@ module.exports = {
       next(error);
     }
   },
-  logout: (req, res) => {
-    const { userId, token } = req;
-    client.get(userId, (err, data) => {
-      if (err) {
-        return helper.response(res, err.message, null, 500);
-      }
-      if (data) {
-        const parseData = JSON.parse(data);
-        client.setex(userId, "1h", JSON.stringify(parseData));
-        return helper.response(res, "Logout succes", 200);
-      }
-
-      const blacklistData = {
-        [userId]: [token],
-      };
-      client.setex(userId, "1h", JSON.stringify(blacklistData));
-      return helper.response(res, "Logout succes", 200);
+  refreshToken: (req, res) => {
+    const token = req.body.refreshToken;
+    jwt.verify(token, process.env.SECRET_KEY, (err, result) => {
+      const payload = {};
+      delete payload.password;
+      const refresh = jwt.sign(payload, process.env.SECRET_KEY, {
+        expiresIn: "1h",
+      });
+      delete payload.password;
+      const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
+        expiresIn: "24h",
+      });
+      payload.token = refresh;
+      payload.refreshToken = refreshToken;
+      helper.response(res, "New Refresh Token", payload);
     });
   },
   activactions: (req, res) => {

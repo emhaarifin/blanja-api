@@ -11,7 +11,6 @@ module.exports = {
       return next(error);
     }
     const result = token.split(" ")[1];
-    console.log(result);
     jwt.verify(result, process.env.SECRET_KEY, function (err, decoded) {
       if (err) {
         if (err.name === "TokenExpiredError") {
@@ -35,25 +34,24 @@ module.exports = {
       next();
     });
   },
-  verifyToken: (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) {
-      const error = new Error("no token provided");
-      error.code = 403;
-      return next(error);
-    }
-    const result = token.split(" ")[1];
-    console.log(result);
-    jwt.verify(result, process.env.SECRET_KEY, function (err, decodedToken) {
+  authenticateToken: (req, res, next) => {
+    const { userId, token } = req;
+
+    client.get(userId, (err, data) => {
       if (err) {
-        const error = err.message;
-        error.status = 401;
-        return next(error);
+        res.status(500).send(err);
       }
-      req.userId = decodedToken.id;
-      req.tokenExp = decodedToken.exp;
-      req.token = token;
-      next();
+
+      if (data) {
+        const parseData = JSON.parse(data);
+        if (parseData[userId].includes(token)) {
+          res.status(500).send({
+            message: "You have to login",
+          });
+        }
+      }
+
+      return next();
     });
   },
   custommer: (req, res, next) => {
