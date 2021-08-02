@@ -39,6 +39,34 @@ module.exports = {
       );
     });
   },
+  getStoreData: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM stores WHERE user_id = "${id}"`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        }
+      );
+    });
+  },
+  getUserById: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM users WHERE id = "${id}"`,
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(error);
+          }
+        }
+      );
+    });
+  },
   activation: (email) => {
     return new Promise((resolve, reject) => {
       connection.query(

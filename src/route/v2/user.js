@@ -10,6 +10,7 @@ route
   .post("/register/custommer", user.registerCus)
   .post("/register/seller", user.registerSeller)
   .post("/refreshtoken", user.refreshToken)
-  .get("/actived/:token", user.activactions);
+  .get("/actived/:token", user.activactions)
+  .get("/profile/:id", user.getUserByID);
 
 module.exports = route;

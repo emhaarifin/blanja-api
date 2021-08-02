@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const users = require("../../models/v2/user");
 const { v4: uuidv4 } = require("uuid");
@@ -5,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const helper = require("../../helper/response");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
+const { getStoreData } = require("../../models/v2/user");
 
 module.exports = {
   registerCus: async (req, res) => {
@@ -126,6 +128,8 @@ module.exports = {
             await users
               .addStore(store)
               .then(() => {
+                data.store = store;
+                console.log(data);
                 helper.response(
                   res,
                   "Register Success and need activation",
@@ -144,15 +148,40 @@ module.exports = {
     });
   },
   login: async (req, res, next) => {
-    try {
-      const checkUser = await users.findUser(req.body.email);
-      if (checkUser.length > 0) {
-        const checkPassword = await bcrypt.compare(
-          req.body.password,
-          checkUser[0].password
-        );
-        if (checkPassword) {
-          const { id, name, roles, avatar } = checkUser[0];
+    const checkUser = await users.findUser(req.body.email);
+    if (checkUser.length > 0) {
+      const checkPassword = bcrypt.compare(
+        req.body.password,
+        checkUser[0].password
+      );
+      if (checkPassword) {
+        const { id, name, roles, avatar } = checkUser[0];
+        console.log(typeof roles);
+        if (roles === "seller") {
+          users.getStoreData(id).then((result) => {
+            checkUser[0].StoreData = result;
+            console.log(result);
+            console.log(id);
+            const payload = {
+              id,
+              name,
+              roles,
+              avatar,
+              ...checkUser[0],
+            };
+            delete payload.email;
+            delete payload.password;
+            const token = jwt.sign(payload, process.env.SECRET_KEY, {
+              expiresIn: "1h",
+            });
+            const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN, {
+              expiresIn: "24h",
+            });
+            payload.token = token;
+            payload.refreshToken = refreshToken;
+            helper.response(res, "Login success", payload, 200);
+          });
+        } else {
           const payload = {
             id,
             name,
@@ -160,6 +189,7 @@ module.exports = {
             avatar,
             ...checkUser[0],
           };
+          delete payload.email;
           delete payload.password;
           const token = jwt.sign(payload, process.env.SECRET_KEY, {
             expiresIn: "1h",
@@ -169,16 +199,13 @@ module.exports = {
           });
           payload.token = token;
           payload.refreshToken = refreshToken;
-
           helper.response(res, "Login success", payload, 200);
-        } else {
-          helper.response(res, "Password wrong");
         }
       } else {
-        helper.response(res, "Email not found", 400);
+        helper.response(res, "Password wrong", null, 401);
       }
-    } catch (error) {
-      next(error);
+    } else {
+      helper.response(res, "Email not found", null, 401);
     }
   },
   refreshToken: (req, res) => {
@@ -197,6 +224,18 @@ module.exports = {
       payload.refreshToken = refreshToken;
       helper.response(res, "New Refresh Token", payload);
     });
+  },
+  getUserByID: (req, res) => {
+    const id = req.params.id;
+    users
+      .getUserById(id)
+      .then((result) => {
+        helper.response(res, "ok", result);
+      })
+      .catch(() => {
+        // console.log(err);
+        helper.response(res, null, 404, "Not Found");
+      });
   },
   activactions: (req, res) => {
     const token = req.params.token;

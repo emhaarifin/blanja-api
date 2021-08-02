@@ -12,6 +12,7 @@ route
   .get("/:id", redisChace.hitCacheProductId, product.getProductbyID)
   .post(
     "/",
+    auth.verifyAccess,
     auth.seller,
     redisChace.clearRedisProductById,
     redisChace.clearRedisProduct,
@@ -20,6 +21,7 @@ route
   )
   .put(
     "/:id",
+    auth.verifyAccess,
     auth.seller,
     redisChace.clearRedisProductById,
     redisChace.clearRedisProduct,
@@ -28,6 +30,7 @@ route
   )
   .delete(
     "/:id",
+    auth.verifyAccess,
     auth.seller,
     redisChace.clearRedisProductById,
     redisChace.clearRedisProduct,

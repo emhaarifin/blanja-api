@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 const mysql = require("mysql");
-// require('dotenv').config();
+// require("dotenv").config();
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 
 connection.connect((error) => {
   if (error) {
-    console.log(error);
+    console.log(error.message);
   } else {
     console.log("Succes Connect to Database");
   }

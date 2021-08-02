@@ -57,6 +57,7 @@ module.exports = {
           data: redisData.slice(offset, endPage), //data di paginasi di sini
         });
         // helper.responsePagination(res, "OK", 200, false, pageDetail, data);
+        console.log("cek data from redis");
       } else {
         next();
       }
@@ -69,7 +70,7 @@ module.exports = {
       // Reply is null when the key is missing
       if (data !== null) {
         const result = JSON.parse(data);
-        // console.log('result redis get', result);
+        console.log("result redis get");
         return helper.response(res, "Data from redis", result);
       }
 

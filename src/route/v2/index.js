@@ -4,10 +4,9 @@ const route = express.Router();
 const product = require("./product");
 const user = require("./user");
 
-const auth = require("../../middleware/auth");
 // const orderSeller = require("./orderSeller");
 
-route.use("/products", auth.verifyAccess, product);
+route.use("/products", product);
 route.use("/auth", user);
 // .use("/category", category)
 // .use("/orderseller", orderSeller)
