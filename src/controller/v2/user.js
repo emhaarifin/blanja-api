@@ -7,6 +7,7 @@ const helper = require("../../helper/response");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const { getStoreData } = require("../../models/v2/user");
+// const user = require("../../models/v2/user");
 
 module.exports = {
   registerCus: async (req, res) => {
@@ -230,18 +231,30 @@ module.exports = {
     users
       .getUserById(id)
       .then((result) => {
-        helper.response(res, "ok", result);
+        const roles = result[0].roles;
+        if (roles === "seller") {
+          users
+            .getStoreData(id)
+            .then((data) => {
+              result[0].StoreData = data;
+              helper.response(res, "ok", result);
+            })
+            .catch((err) => {
+              helper.response(res, err.message, null, 404);
+            });
+        } else {
+          helper.response(res, "ok", result);
+        }
       })
-      .catch(() => {
-        // console.log(err);
-        helper.response(res, null, 404, "Not Found");
+      .catch((err) => {
+        helper.response(res, "Not Found", null, 404);
       });
   },
   activactions: (req, res) => {
     const token = req.params.token;
     jwt.verify(token, process.env.SECRET_KEY, (err, decode) => {
       if (err) {
-        helper.response(res, "Activation Failed", 500);
+        helper.response(res, "Activation Failed", null, 401);
       } else {
         const email = decode.email;
         users

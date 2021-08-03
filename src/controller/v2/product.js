@@ -101,14 +101,11 @@ module.exports = {
         helper.response(res, "Succes input data", data, 200);
       })
       .catch((err) => {
-        console.log(dirPath, "cek");
-        console.log(req.file, "cek file");
         fs.unlink(`${dirPath}/${req.file.filename}`, (err) => {
           if (err) {
             console.log("Error unlink image product!" + err);
           }
         });
-
         helper.response(res, err.message, null, 410);
       });
   },

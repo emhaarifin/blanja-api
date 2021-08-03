@@ -12,8 +12,8 @@ route
   .get("/:id", redisChace.hitCacheProductId, product.getProductbyID)
   .post(
     "/",
-    auth.verifyAccess,
-    auth.seller,
+    // auth.verifyAccess,
+    // auth.seller,
     redisChace.clearRedisProductById,
     redisChace.clearRedisProduct,
     upload.single("image"),
@@ -21,8 +21,8 @@ route
   )
   .put(
     "/:id",
-    auth.verifyAccess,
-    auth.seller,
+    // auth.verifyAccess,
+    // auth.seller,
     redisChace.clearRedisProductById,
     redisChace.clearRedisProduct,
     upload.single("image"),

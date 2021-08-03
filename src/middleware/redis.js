@@ -51,7 +51,7 @@ module.exports = {
         };
         res.send({
           message: "get data from redis",
-          code: 200,
+          status: 200,
           success: true,
           pageDetail,
           data: redisData.slice(offset, endPage), //data di paginasi di sini
