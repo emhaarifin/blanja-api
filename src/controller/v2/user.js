@@ -7,6 +7,7 @@ const helper = require("../../helper/response");
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const { getStoreData } = require("../../models/v2/user");
+const user = require("../../models/v2/user");
 // const user = require("../../models/v2/user");
 
 module.exports = {
@@ -249,6 +250,57 @@ module.exports = {
       .catch((err) => {
         helper.response(res, "Not Found", null, 404);
       });
+  },
+  updateProfile: async (req, res) => {
+    const id = req.params.id;
+    const data = {
+      email: req.body.email,
+      phone_number: req.body.phone_number,
+    };
+
+    const checkStore = await users.findStore(id);
+    if (checkStore.length > 0) {
+      console.log(checkStore);
+      const storeData = {
+        store_name: req.body.store_name,
+        store_description: req.body.store_description,
+      };
+      users
+        .updateStoreUser(id, storeData)
+        .then(() => {
+          data.store_name = storeData.store_name;
+          data.store_description = storeData.store_description;
+          users
+            .updateUser(id, data)
+            .then(() => {
+              helper.response(res, "Succes Update Profile", 200);
+            })
+            .catch((err) => {
+              helper.response(res, err.message, null, 401);
+            });
+        })
+        .catch((err) => {
+          helper.response(res, err.message, null, 400);
+        });
+    } else {
+      const profileUser = {
+        name: req.body.name,
+        gender: req.body.gender,
+        date_of_birth: new Date(),
+      };
+      data.name = profileUser.name;
+      data.gender = profileUser.gender;
+      data.date_of_birth = profileUser.date_of_birth;
+      users
+        .updateUser(id, data)
+        .then(() => {
+          helper.response(res, "Success Update Profile", 200);
+        })
+        .catch((err) => {
+          console.log(req.body);
+          helper.response(res, err.message, null, 401);
+        });
+    }
   },
   activactions: (req, res) => {
     const token = req.params.token;

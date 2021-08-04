@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 require("dotenv").config();
 const createError = require("http-errors");
