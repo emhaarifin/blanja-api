@@ -117,18 +117,31 @@ module.exports = {
       description: req.body.description,
       stock: req.body.stock,
       categoryId: req.body.categoryId,
-      image: `${process.env.BASE_URL}/file/${req.file.filename}`,
       price: req.body.price,
       modifiedAt: new Date(),
     };
-    product
-      .updateProduct(Number(id), data)
-      .then(() => {
-        helper.response(res, "Success update data");
-      })
-      .catch((err) => {
-        helper.response(res, null, 404, err);
-      });
+
+    if (req.file) {
+      data.image = `${process.env.BASE_URL}/file/${req.file.filename}`;
+      product
+        .updateProduct(Number(id), data)
+        .then(() => {
+          helper.response(res, "Success update data");
+        })
+        .catch((err) => {
+          helper.response(res, null, 404, err);
+        });
+      helper.response(res, "Success update data");
+    } else {
+      product
+        .updateProduct(Number(id), data)
+        .then(() => {
+          helper.response(res, "Success update data");
+        })
+        .catch((err) => {
+          helper.response(res, null, 404, err);
+        });
+    }
   },
 
   deleteProduct: (req, res) => {
