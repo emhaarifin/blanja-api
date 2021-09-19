@@ -105,7 +105,7 @@ URL_FRONT_END = [URL_LOCAL_FRONTEND]
 npm run dev
 ```
 7. Testing with Postman
-    * [Blanja Postman APIs Collection](https://documenter.getpostman.com/view/15390348/Tzm8EEmp)
+<!--     * [Blanja Postman APIs Collection](https://documenter.getpostman.com/view/15390348/Tzm8EEmp) -->
 
 ### Related Project
 
