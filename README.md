@@ -1,8 +1,6 @@
-<!-- PROJECT LOGO -->
+<h1 align="center">Ecommerce API</h1>
 <br />
 <p align="center">
-  <h1 align="center">Ecommerce API</h1>
-
   <p align="center">
     This is a simple CRUD API that I created using node js and the express js framework.
     <br />
