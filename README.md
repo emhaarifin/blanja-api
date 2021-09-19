@@ -1,49 +1,121 @@
-# ecommerce-api
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/emhaarifin/ecommerce-api">
+    <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg" alt="Logo" width="140" height="194">
+  </a>
 
-This is a simple CRUD API that I created using node js and the express js framework. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+  <h3 align="center">RESTful API for Blanja</h3>
 
-## Built With
+  <p align="center">
+    This is a simple CRUD API that I created using node js and the express js framework.
+    <br />
+    <a href="https://github.com/emhaarifin/ecommerce-api"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="">View Demo</a>
+    ·
+    <a href="https://github.com/emhaarifin/ecommerce-api/issues">Report Bug</a>
+    ·
+    <a href="hhttps://github.com/emhaarifin/ecommerce-api/pulls">Request Feature</a>
+  </p>
+</p>
 
-[![Express.js](https://img.shields.io/badge/Express.js-4.x-orange.svg?style=rounded-square)](https://expressjs.com/en/starter/installing.html)
-[![Node.js](https://img.shields.io/badge/Node.js-v.12.18.3-green.svg?style=rounded-square)](https://nodejs.org/)
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+        <ol>
+            <li>
+                <a href="#build-with">Build With</a>
+            </li>
+        </ol>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ol>
+        <li>
+          <a href="#installation">Installation</a>
+        </li>
+        <li>
+          <a href="#prerequisites">Prerequisites</a>
+        </li>
+        <li>
+          <a href="#related-project">Related Project</a>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#ecommerce-api-documentation">Ecommerce API Documentation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-## Requirements
+## About The Project
 
-1. CRUD
-2. <a href="https://www.getpostman.com/">Postman</a>
-3. Web Server (ex. localhost)
+<b>Blanja</b> is an online shop that currently focuses on the fashion market. Allows sellers to market their fashion products and customers can buy the best and cheap fashion needs.
 
-## How to run the app ?
+### Build With
+* [Express Js](https://expressjs.com/)
+* [Node Js](https://nodejs.org/en/)
+* [MySQL](https://www.mysql.com/)
+* [Json Web Token](https://jwt.io/)
+* [Nodemailer](https://nodemailer.com/about/)
 
-1. Clone the app type in terminal git clone https://github.com/emhaarifin/ecommerce-api.git
-2. Open app's directory in CMD or Terminal
-3. Turn on Web Server and MySQL can using Third-party tool like xampp, etc
-4. Make new file a called **.env**, set up first [here](#set-up-env-file)
-5. Type `npm run dev`
-6. Open Postman desktop application or Chrome web app extension that has installed before
-7. Choose HTTP Method and enter request url.(ex. localhost:8080/)
-8. You can see all the end point [here](#end-point)
+## Getting Started
 
-## End Point
+### Prerequisites
 
-**1. POST**
+This is an example of how to list things you need to use the software and how to install them.
+* [Node Js](https://nodejs.org/en/download/)
+* [MySQL](https://www.mysql.com/downloads/)
+* [Postman](https://www.postman.com/downloads/)
 
-- `/items` (Add data to table items)
+### Installation
+    
+1. Clone These 2 Repos (Backend and Frontend)
+```sh
+https://github.com/emhaarifin/ecommerce-api
+```
+2. Go To Folder Repo
+```sh
+cd ecommerce-api
+```
+3. Install Module
+```sh
+npm install
+```
+<!-- 4. Make a new database and import [blanja-sample.sql](https://drive.google.com/file/d/1N7WlJEPonnIwcRwnVA3yN0EmCXes4dWJ/view?usp=sharing) -->
+5. Add .env file at root folder project, and add following
+```sh
+DB_HOST = [DB_HOST]
+DB_USER = [DB_USER]
+DB_NAME = [DB_NAME]
+DB_PASS = [DB_PASS]
+DB_PORT = [PORT_EXPRESS]
+REDIL_URL = [REDIS_PORT]
+BASE_URL = [URL_LOCAL_BACKEND]
+SECRET_KEY = [JWT_SECRET_KEY]
+REFRESH_TOKEN = [JWT_SECRET_KET]
+URL_FRONT_END = [URL_LOCAL_FRONTEND]
+```
+6. Starting application
+```sh
+npm run dev
+```
+7. Testing with Postman
+    * [Blanja Postman APIs Collection](https://documenter.getpostman.com/view/15390348/Tzm8EEmp)
 
-**2. GET**
+### Related Project
 
-- `/items`(Get All items)
+* [`Frontend-Blanja`](https://github.com/emhaarifin/React-Blanja)
+* [`Backend-Ecommerce`](https://github.com/emhaarifin/ecommerce-api)
 
-- (Get All Items with fitur Search , Sort and Limit Pagination)
+## Ecommerce API Documentation
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/64c3c4d9f8dedefd90ed)
 
-**3. GET BY ID**
+## Contact
+My Email : 101muhammadarifin@gmail.com
 
-- `/items/:id` (Get all detail on related id number)
-
-**4. PUT BY ID**
-
-- `/items/:id` (Update specific column in items by id)
-
-**5. DELETE BY ID**
-
-- `/items/:id` (Delete items by id)
+Project Link: [https://github.com/emhaarifin/ecommerce-api](https://github.com/emhaarifin/ecommerce-api)
