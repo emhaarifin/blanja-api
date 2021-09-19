@@ -1,6 +1,5 @@
 <h1 align="center">Ecommerce API</h1>
 
-<br/>
 <p align="center">
     <a href="https://bit.ly/blanja-netlify" target="_blank">View Demo</a>
     ·
