@@ -10,7 +10,7 @@
   <p align="center">
     This is a simple CRUD API that I created using node js and the express js framework.
     <br />
-    <a href="https://github.com/emhaarifin/ecommerce-api"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/emhaarifin/ecommerce-api" target="_blank"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://bit.ly/blanja-netlify">View Demo</a>
