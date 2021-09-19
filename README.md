@@ -86,7 +86,7 @@ cd ecommerce-api
 ```sh
 npm install
 ```
-4. Make a new database and import sql at src/sql folder
+4. Make a new database and import sql file at folder src/sql
 5. Add .env file at root folder project, and add following
 ```sh
 DB_HOST = [DB_HOST]
