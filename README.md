@@ -1,11 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/emhaarifin/ecommerce-api">
-    <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg" alt="Logo" width="140" height="194">
-  </a>
-
-  <h3 align="center">Ecommerce API</h3>
+  <h1 align="center">Ecommerce API</h1>
 
   <p align="center">
     This is a simple CRUD API that I created using node js and the express js framework.
