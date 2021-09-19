@@ -1,7 +1,6 @@
 <h1 align="center">Ecommerce API</h1>
 <br />
 <p align="center">
-  <p align="center">
     <a href="https://github.com/emhaarifin/ecommerce-api"><strong>Explore the docs »</strong></a>
     <br />
     <br />
@@ -10,7 +9,6 @@
     <a href="https://github.com/emhaarifin/ecommerce-api/issues" target="_blank">Report Bug</a>
     ·
     <a href="https://github.com/emhaarifin/ecommerce-api/pulls" target="_blank">Request Feature</a>
-  </p>
 </p>
 
 <!-- TABLE OF CONTENTS -->
