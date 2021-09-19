@@ -1,4 +1,6 @@
 <h1 align="center">Ecommerce API</h1>
+
+<br/>
 <p align="center">
     <a href="https://bit.ly/blanja-netlify" target="_blank">View Demo</a>
     ·
@@ -6,6 +8,7 @@
     ·
     <a href="https://github.com/emhaarifin/ecommerce-api/pulls" target="_blank">Request Feature</a>
 </p>
+<br/>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
