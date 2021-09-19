@@ -17,7 +17,7 @@
     ·
     <a href="https://github.com/emhaarifin/ecommerce-api/issues">Report Bug</a>
     ·
-    <a href="hhttps://github.com/emhaarifin/ecommerce-api/pulls">Request Feature</a>
+    <a href="https://github.com/emhaarifin/ecommerce-api/pulls">Request Feature</a>
   </p>
 </p>
 
