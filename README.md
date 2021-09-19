@@ -2,7 +2,6 @@
 <br />
 <p align="center">
   <p align="center">
-    <br />
     <a href="https://github.com/emhaarifin/ecommerce-api"><strong>Explore the docs »</strong></a>
     <br />
     <br />
