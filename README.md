@@ -5,7 +5,7 @@
     <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg" alt="Logo" width="140" height="194">
   </a>
 
-  <h3 align="center">RESTful API for Blanja</h3>
+  <h3 align="center">RESTful API Ecommerce</h3>
 
   <p align="center">
     This is a simple CRUD API that I created using node js and the express js framework.
