@@ -86,7 +86,7 @@ cd ecommerce-api
 ```sh
 npm install
 ```
-<!-- 4. Make a new database and import [blanja-sample.sql](https://drive.google.com/file/d/1N7WlJEPonnIwcRwnVA3yN0EmCXes4dWJ/view?usp=sharing) -->
+4. Make a new database and import sql at src/sql folder
 5. Add .env file at root folder project, and add following
 ```sh
 DB_HOST = [DB_HOST]
