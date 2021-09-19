@@ -5,7 +5,7 @@
     <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg" alt="Logo" width="140" height="194">
   </a>
 
-  <h3 align="center">RESTful API Ecommerce</h3>
+  <h3 align="center">Ecommerce API</h3>
 
   <p align="center">
     This is a simple CRUD API that I created using node js and the express js framework.
@@ -105,7 +105,7 @@ URL_FRONT_END = [URL_LOCAL_FRONTEND]
 npm run dev
 ```
 7. Testing with Postman
-<!--     * [Blanja Postman APIs Collection](https://documenter.getpostman.com/view/15390348/Tzm8EEmp) -->
+    * [Ecommerce Postman APIs Collection](https://documenter.getpostman.com/view/10604967/UUxtEAPX)
 
 ### Related Project
 
