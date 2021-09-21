@@ -1,49 +1,109 @@
-# ecommerce-api
+<h1 align="center">Ecommerce API</h1>
 
-This is a simple CRUD API that I created using node js and the express js framework. [More about Express](https://en.wikipedia.org/wiki/Express.js)
+<p align="center">
+    <a href="https://bit.ly/blanja-netlify" target="_blank">View Demo</a>
+    ·
+    <a href="https://github.com/emhaarifin/ecommerce-api/issues" target="_blank">Report Bug</a>
+    ·
+    <a href="https://github.com/emhaarifin/ecommerce-api/pulls" target="_blank">Request Feature</a>
+</p>
+<br/>
 
-## Built With
+<!-- TABLE OF CONTENTS -->
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+        <ol>
+            <li>
+                <a href="#build-with">Build With</a>
+            </li>
+        </ol>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ol>
+        <li>
+          <a href="#installation">Installation</a>
+        </li>
+        <li>
+          <a href="#prerequisites">Prerequisites</a>
+        </li>
+        <li>
+          <a href="#related-project">Related Project</a>
+        </li>
+      </ol>
+    </li>
+    <li><a href="#ecommerce-api-documentation">Ecommerce API Documentation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-[![Express.js](https://img.shields.io/badge/Express.js-4.x-orange.svg?style=rounded-square)](https://expressjs.com/en/starter/installing.html)
-[![Node.js](https://img.shields.io/badge/Node.js-v.12.18.3-green.svg?style=rounded-square)](https://nodejs.org/)
+## About The Project
 
-## Requirements
+<b>Blanja</b> is an online shop that currently focuses on the fashion market. Allows sellers to market their fashion products and customers can buy the best and cheap fashion needs.
 
-1. CRUD
-2. <a href="https://www.getpostman.com/">Postman</a>
-3. Web Server (ex. localhost)
+### Build With
+* [Express Js](https://expressjs.com/)
+* [Node Js](https://nodejs.org/en/)
+* [MySQL](https://www.mysql.com/)
+* [Json Web Token](https://jwt.io/)
+* [Nodemailer](https://nodemailer.com/about/)
 
-## How to run the app ?
+## Getting Started
 
-1. Clone the app type in terminal git clone https://github.com/emhaarifin/ecommerce-api.git
-2. Open app's directory in CMD or Terminal
-3. Turn on Web Server and MySQL can using Third-party tool like xampp, etc
-4. Make new file a called **.env**, set up first [here](#set-up-env-file)
-5. Type `npm run dev`
-6. Open Postman desktop application or Chrome web app extension that has installed before
-7. Choose HTTP Method and enter request url.(ex. localhost:8080/)
-8. You can see all the end point [here](#end-point)
+### Prerequisites
 
-## End Point
+This is an example of how to list things you need to use the software and how to install them.
+* [Node Js](https://nodejs.org/en/download/)
+* [MySQL](https://www.mysql.com/downloads/)
+* [Postman](https://www.postman.com/downloads/)
 
-**1. POST**
+### Installation
+    
+1. Clone These 2 Repos (Backend and Frontend)
+```sh
+https://github.com/emhaarifin/ecommerce-api
+```
+2. Go To Folder Repo
+```sh
+cd ecommerce-api
+```
+3. Install Module
+```sh
+npm install
+```
+4. Make a new database and import sql file at folder src/sql
+5. Add .env file at root folder project, and add following
+```sh
+DB_HOST = [DB_HOST]
+DB_USER = [DB_USER]
+DB_NAME = [DB_NAME]
+DB_PASS = [DB_PASS]
+DB_PORT = [PORT_EXPRESS]
+REDIL_URL = [REDIS_PORT]
+BASE_URL = [URL_LOCAL_BACKEND]
+SECRET_KEY = [JWT_SECRET_KEY]
+REFRESH_TOKEN = [JWT_SECRET_KET]
+URL_FRONT_END = [URL_LOCAL_FRONTEND]
+```
+6. Starting application
+```sh
+npm run dev
+```
+7. Testing with Postman
+    * [Ecommerce Postman APIs Collection](https://documenter.getpostman.com/view/10604967/UUxtEAPX)
 
-- `/items` (Add data to table items)
+### Related Project
 
-**2. GET**
+* [`Frontend-Blanja`](https://github.com/emhaarifin/React-Blanja)
+* [`Backend-Ecommerce`](https://github.com/emhaarifin/ecommerce-api)
 
-- `/items`(Get All items)
+## Ecommerce API Documentation
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/64c3c4d9f8dedefd90ed)
 
-- (Get All Items with fitur Search , Sort and Limit Pagination)
+## Contact
+My Email : 101muhammadarifin@gmail.com
 
-**3. GET BY ID**
-
-- `/items/:id` (Get all detail on related id number)
-
-**4. PUT BY ID**
-
-- `/items/:id` (Update specific column in items by id)
-
-**5. DELETE BY ID**
-
-- `/items/:id` (Delete items by id)
+Project Link: [https://github.com/emhaarifin/ecommerce-api](https://github.com/emhaarifin/ecommerce-api)
