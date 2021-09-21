@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const orderSeller = require("../../models/v1/orderSeller");
-const helper = require("../../helper/response");
+const orderSeller = require('../models/orderSeller');
+const helper = require('../helper/response');
 
 module.exports = {
   getOrder: (req, res) => {
-    const search = req.query.search || "";
-    const sortBy = req.query.sortBy || "id";
-    const sort = req.query.sort || "ASC";
+    const search = req.query.search || '';
+    const sortBy = req.query.sortBy || 'id';
+    const sort = req.query.sort || 'ASC';
     orderSeller
       .getAllOrder(search, sortBy, sort)
       .then((result) => {
@@ -40,11 +40,11 @@ module.exports = {
     orderSeller
       .addOrder(data)
       .then(() => {
-        helper.response(res, "Succes input order", data, 200);
+        helper.response(res, 'Succes input order', data, 200);
         // console.log(result);
       })
       .catch((error) => {
-        helper.response(res, "Error input order", null, 410);
+        helper.response(res, 'Error input order', null, 410);
         console.log(error);
       });
   },
@@ -56,11 +56,11 @@ module.exports = {
     orderSeller
       .updateOrder(Number(id), data)
       .then((result) => {
-        helper.response(res, "Success update order");
+        helper.response(res, 'Success update order');
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, "Id order for update No found");
+        helper.response(res, null, 404, 'Id order for update No found');
       });
   },
   deleteOrder: (req, res) => {
@@ -68,11 +68,11 @@ module.exports = {
     orderSeller
       .deleteOrder(Number(id))
       .then((result) => {
-        helper.response(res, "Success delete order");
+        helper.response(res, 'Success delete order');
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, "Id order for delete No found");
+        helper.response(res, null, 404, 'Id order for delete No found');
       });
   },
 };

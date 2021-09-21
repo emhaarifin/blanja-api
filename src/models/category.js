@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-const connection = require("../../../src/confiq/db");
+const connection = require('../confiq/db');
 
 module.exports = {
   getProductCount: () => {
     return new Promise((resolve) => {
       connection.query(
-        "SELECT COUNT(*) as TotalProducts FROM products",
+        'SELECT COUNT(*) as TotalProducts FROM products',
         // c.id, c.categoryName as category, c.image, p.* FROM category c INNER JOIN products p ON c.id = p.categoryId
         (err, result) => {
           if (!err) {
@@ -17,22 +17,19 @@ module.exports = {
   },
   getAllCategory: () => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT id, categoryName as category, image, color FROM category`,
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(new Error(error));
-          }
+      connection.query(`SELECT id, categoryName as category, image, color FROM category`, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(new Error(error));
         }
-      );
+      });
     });
   },
   getCategorybyID: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        "SELECT c.id, c.categoryName as category, c.image FROM category c WHERE c.id = ?",
+        'SELECT c.id, c.categoryName as category, c.image FROM category c WHERE c.id = ?',
         id,
         (error, result) => {
           if (!error) {
@@ -73,32 +70,24 @@ module.exports = {
   },
   updateCategory: (id, data) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "UPDATE category SET ? WHERE id = ?",
-        [data, id],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('UPDATE category SET ? WHERE id = ?', [data, id], (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
   deleteCategory: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "DELETE FROM category WHERE id = ?",
-        id,
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('DELETE FROM category WHERE id = ?', id, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
 };

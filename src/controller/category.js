@@ -1,17 +1,17 @@
 /* eslint-disable no-undef */
-const category = require("../../models/v1/category");
-const helper = require("../../helper/response");
+const category = require('../models/category');
+const helper = require('../helper/response');
 
 module.exports = {
   getCategory: (req, res) => {
     category
       .getAllCategory()
       .then((result) => {
-        helper.response(res, "OK", result);
+        helper.response(res, 'OK', result);
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, "Data Not Found");
+        helper.response(res, null, 404, 'Data Not Found');
       });
   },
   getCategorybyID: (req, res) => {
@@ -46,34 +46,14 @@ module.exports = {
                 total: Math.ceil(total),
                 per_page: limit,
                 current_page: page,
-                nextLink: `http://localhost:4000${req.originalUrl.replace(
-                  "page=" + page,
-                  "page=" + nextPage
-                )}`,
-                prevLink: `http://localhost:4000${req.originalUrl.replace(
-                  "page=" + page,
-                  "page=" + prevPage
-                )}`,
+                nextLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + nextPage)}`,
+                prevLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + prevPage)}`,
               };
               if (data[0] !== undefined) {
-                helper.responsePagination(
-                  res,
-                  "OK",
-                  200,
-                  false,
-                  pageDetail,
-                  data
-                );
+                helper.responsePagination(res, 'OK', 200, false, pageDetail, data);
                 // console.log(data);
               } else {
-                helper.responsePagination(
-                  res,
-                  "Data is nut found",
-                  404,
-                  true,
-                  pageDetail,
-                  data
-                );
+                helper.responsePagination(res, 'Data is nut found', 404, true, pageDetail, data);
               }
             })
             .catch((error) => {
@@ -96,10 +76,10 @@ module.exports = {
     category
       .addCategory(data)
       .then(() => {
-        helper.response(res, "Succes input category", data, 200);
+        helper.response(res, 'Succes input category', data, 200);
       })
       .catch((error) => {
-        helper.response(res, "Error input category", null, 410);
+        helper.response(res, 'Error input category', null, 410);
         console.log(error);
       });
   },
@@ -112,7 +92,7 @@ module.exports = {
     category
       .updateCategory(Number(id), data)
       .then((res) => {
-        helper.response(res, "Success update category");
+        helper.response(res, 'Success update category');
       })
       .catch((err) => {
         console.log(err);
@@ -124,11 +104,11 @@ module.exports = {
     category
       .deleteCategory(Number(id))
       .then((res) => {
-        helper.response(res, "Success delete category");
+        helper.response(res, 'Success delete category');
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, "Id cateogry for delete No found");
+        helper.response(res, null, 404, 'Id cateogry for delete No found');
       });
   },
 };

@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const connection = require("../../../src/confiq/db");
+const connection = require('../confiq/db');
 
 module.exports = {
   getAllOrder: (search, sortBy, sort) => {
@@ -35,47 +35,35 @@ module.exports = {
   },
   addOrder: (data) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `INSERT INTO order_seller set ?`,
-        data,
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query(`INSERT INTO order_seller set ?`, data, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
   updateOrder: (id, data) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "UPDATE order_seller o SET ? WHERE o.id = ?",
-        [data, id],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('UPDATE order_seller o SET ? WHERE o.id = ?', [data, id], (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
   deleteOrder: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "DELETE FROM order_seller WHERE id = ?",
-        id,
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('DELETE FROM order_seller WHERE id = ?', id, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
 };

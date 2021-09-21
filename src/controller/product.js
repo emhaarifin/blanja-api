@@ -1,18 +1,18 @@
 /* eslint-disable no-undef */
-const product = require("../../models/v2/product");
-const helper = require("../../helper/response");
-const redis = require("redis");
+const product = require('../models/product');
+const helper = require('../helper/response');
+const redis = require('redis');
 const client = redis.createClient();
-const path = require("path");
-const fs = require("fs");
-const dirPath = path.join(__dirname, "../../../uploads");
+const path = require('path');
+const fs = require('fs');
+const dirPath = path.join(__dirname, '../../../uploads');
 
 module.exports = {
   getProduct: (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const search = req.query.search || "";
-    const sortBy = req.query.sortBy || "id";
-    const sort = req.query.sort || "ASC";
+    const search = req.query.search || '';
+    const sortBy = req.query.sortBy || 'id';
+    const sort = req.query.sort || 'ASC';
     const limit = parseInt(req.query.limit) || 15;
     const offset = (page - 1) * limit;
     product
@@ -32,24 +32,11 @@ module.exports = {
               per_page: limit,
               current_page: page,
               totalPage: Math.ceil(total / limit),
-              nextLink: `http://localhost:4000${req.originalUrl.replace(
-                "page=" + page,
-                "page=" + nextPage
-              )}`,
-              prevLink: `http://localhost:4000${req.originalUrl.replace(
-                "page=" + page,
-                "page=" + prevPage
-              )}`,
+              nextLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + nextPage)}`,
+              prevLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + prevPage)}`,
             };
             if (data[0] !== undefined) {
-              helper.responsePagination(
-                res,
-                "OK",
-                200,
-                false,
-                pageDetail,
-                data
-              );
+              helper.responsePagination(res, 'OK', 200, false, pageDetail, data);
             } else {
               helper.responsePagination(res, err, 404, true, pageDetail, data);
             }
@@ -65,7 +52,7 @@ module.exports = {
     product
       .getAllWithRedis()
       .then((resRedist) => {
-        client.setex("data", 60 * 60, JSON.stringify(resRedist));
+        client.setex('data', 60 * 60, JSON.stringify(resRedist));
       })
       .catch((error) => {
         helper.response(res, null, 404, error);
@@ -78,10 +65,10 @@ module.exports = {
       .getProductbyID(id)
       .then((result) => {
         client.setex(`product/${id}`, 60 * 60, JSON.stringify(result));
-        helper.response(res, "ok", result);
+        helper.response(res, 'ok', result);
       })
       .catch(() => {
-        helper.response(res, null, 404, "Not Found");
+        helper.response(res, null, 404, 'Not Found');
       });
   },
   addProduct: (req, res) => {
@@ -98,12 +85,12 @@ module.exports = {
     product
       .addProduct(data)
       .then(() => {
-        helper.response(res, "Succes input data", data, 200);
+        helper.response(res, 'Succes input data', data, 200);
       })
       .catch((err) => {
         fs.unlink(`${dirPath}/${req.file.filename}`, (err) => {
           if (err) {
-            console.log("Error unlink image product!" + err);
+            console.log('Error unlink image product!' + err);
           }
         });
         helper.response(res, err.message, null, 410);
@@ -126,17 +113,17 @@ module.exports = {
       product
         .updateProduct(Number(id), data)
         .then(() => {
-          helper.response(res, "Success update data");
+          helper.response(res, 'Success update data');
         })
         .catch((err) => {
           helper.response(res, null, 404, err);
         });
-      helper.response(res, "Success update data");
+      helper.response(res, 'Success update data');
     } else {
       product
         .updateProduct(Number(id), data)
         .then(() => {
-          helper.response(res, "Success update data");
+          helper.response(res, 'Success update data');
         })
         .catch((err) => {
           helper.response(res, null, 404, err);
@@ -149,7 +136,7 @@ module.exports = {
     product
       .deleteProduct(Number(id))
       .then(() => {
-        helper.response(res, "Success delete product");
+        helper.response(res, 'Success delete product');
       })
       .catch((err) => {
         helper.response(res, 404, err);

@@ -1,17 +1,14 @@
 /* eslint-disable no-undef */
-const connection = require("../../../src/confiq/db");
+const connection = require('../confiq/db');
 
 module.exports = {
   getProductCount: () => {
     return new Promise((resolve) => {
-      connection.query(
-        "SELECT COUNT(*) as TotalProducts FROM products",
-        (err, result) => {
-          if (!err) {
-            resolve(result);
-          } else new Error(err);
-        }
-      );
+      connection.query('SELECT COUNT(*) as TotalProducts FROM products', (err, result) => {
+        if (!err) {
+          resolve(result);
+        } else new Error(err);
+      });
     });
   },
   getAllProduct: (search, sortBy, sort, offset, limit) => {
@@ -74,32 +71,24 @@ module.exports = {
   },
   updateProduct: (id, data) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "UPDATE products SET ? WHERE id = ?",
-        [data, id],
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('UPDATE products SET ? WHERE id = ?', [data, id], (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
   deleteProduct: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        "DELETE FROM products WHERE id = ?",
-        id,
-        (error, result) => {
-          if (!error) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
+      connection.query('DELETE FROM products WHERE id = ?', id, (error, result) => {
+        if (!error) {
+          resolve(result);
+        } else {
+          reject(error);
         }
-      );
+      });
     });
   },
 };
