@@ -6,8 +6,6 @@ const bcrypt = require('bcryptjs');
 const helper = require('../helper/response');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const { getStoreData } = require('../models/v2/user');
-const user = require('../models/v2/user');
 // const user = require("../../models/v2/user");
 
 module.exports = {

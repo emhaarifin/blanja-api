@@ -12,7 +12,7 @@ module.exports = {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search || '';
     const sortBy = req.query.sortBy || 'id';
-    const sort = req.query.sort || 'ASC';
+    const sort = req.query.sort;
     const limit = parseInt(req.query.limit) || 15;
     const offset = (page - 1) * limit;
     product
