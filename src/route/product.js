@@ -3,7 +3,6 @@
 const express = require('express');
 const route = express.Router();
 const product = require('../controller/product');
-const redisChace = require('../middleware/redis');
 const upload = require('../middleware/multer');
 const auth = require('../middleware/auth');
 

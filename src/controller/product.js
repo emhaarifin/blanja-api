@@ -1,8 +1,6 @@
 /* eslint-disable no-undef */
 const product = require('../models/product');
 const helper = require('../helper/response');
-const redis = require('redis');
-const client = redis.createClient();
 const path = require('path');
 const fs = require('fs');
 const dirPath = path.join(__dirname, '../../../uploads');
