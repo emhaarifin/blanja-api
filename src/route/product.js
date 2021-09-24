@@ -8,33 +8,11 @@ const upload = require('../middleware/multer');
 const auth = require('../middleware/auth');
 
 route
-  .get('/', redisChace.hitCacheAllProduct, product.getProduct)
-  .get('/:id', redisChace.hitCacheProductId, product.getProductbyID)
-  .post(
-    '/',
-    auth.verifyAccess,
-    auth.seller,
-    redisChace.clearRedisProductById,
-    redisChace.clearRedisProduct,
-    upload.single('image'),
-    product.addProduct
-  )
-  .put(
-    '/:id',
-    auth.verifyAccess,
-    auth.seller,
-    redisChace.clearRedisProductById,
-    redisChace.clearRedisProduct,
-    upload.single('image'),
-    product.updateProduct
-  )
-  .delete(
-    '/:id',
-    auth.verifyAccess,
-    auth.seller,
-    redisChace.clearRedisProductById,
-    redisChace.clearRedisProduct,
-    product.deleteProduct
-  );
+  .get('/', product.getProduct)
+  .get('/:id', product.getProductbyID)
+  .get('/store', auth.verifyAccess, auth.seller, product.getProductByStore)
+  .post('/', auth.verifyAccess, auth.seller, upload.single('image'), product.addProduct)
+  .put('/:id', auth.verifyAccess, auth.seller, upload.single('image'), product.updateProduct)
+  .delete('/:id', auth.verifyAccess, auth.seller, product.deleteProduct);
 
 module.exports = route;

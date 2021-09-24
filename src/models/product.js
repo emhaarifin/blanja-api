@@ -11,6 +11,18 @@ module.exports = {
       });
     });
   },
+  getProductCountByStore: (storeId) => {
+    return new Promise((resolve) => {
+      connection.query(
+        `SELECT COUNT(*) as TotalProducts FROM products WHERE products.store_id = "${storeId}"`,
+        (err, result) => {
+          if (!err) {
+            resolve(result);
+          } else new Error(err);
+        }
+      );
+    });
+  },
   getAllProduct: (search, sortBy, sort, offset, limit) => {
     return new Promise((resolve, reject) => {
       connection.query(
@@ -26,7 +38,21 @@ module.exports = {
       );
     });
   },
-
+  getAllProductByStore: (search, sortBy, sort, offset, limit, storeId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT p.*, categoryName as category FROM products p INNER JOIN category c ON c.id = p.categoryId WHERE (p.store_id = "${storeId}" AND p.name LIKE CONCAT('%',?,'%')) ORDER BY ${sortBy} ${sort} LIMIT ?, ?`,
+        [search, offset, limit],
+        (error, result) => {
+          if (!error) {
+            resolve(result);
+          } else {
+            reject(new Error(error));
+          }
+        }
+      );
+    });
+  },
   getAllWithRedis: () => {
     // (SELECT COUNT(*) FROM products) AS TotalProducts,
     return new Promise((resolve, reject) => {

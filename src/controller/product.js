@@ -12,7 +12,7 @@ module.exports = {
     const page = parseInt(req.query.page) || 1;
     const search = req.query.search || '';
     const sortBy = req.query.sortBy || 'id';
-    const sort = req.query.sort;
+    const sort = req.query.sort || 'DESC';
     const limit = parseInt(req.query.limit) || 15;
     const offset = (page - 1) * limit;
     product
@@ -49,16 +49,58 @@ module.exports = {
         helper.response(res, null, 404, error);
       });
 
+    // product
+    //   .getAllWithRedis()
+    //   .then((resRedist) => {
+    //     client.setex('data', 60 * 60, JSON.stringify(resRedist));
+    //   })
+    //   .catch((error) => {
+    //     helper.response(res, null, 404, error);
+    //   });
+  },
+
+  getProductByStore: (req, res) => {
+    const idUser = req.store_id;
+    const page = parseInt(req.query.page) || 1;
+    const search = req.query.search || '';
+    const sortBy = req.query.sortBy || 'id';
+    const sort = req.query.sort || 'DESC';
+    const limit = parseInt(req.query.limit) || 15;
+    const offset = (page - 1) * limit;
     product
-      .getAllWithRedis()
-      .then((resRedist) => {
-        client.setex('data', 60 * 60, JSON.stringify(resRedist));
+      .getProductCountByStore(idUser)
+      .then((result) => {
+        let total = result[0].TotalProducts;
+        const prevPage = page === 1 ? 1 : page - 1;
+        const nextPage = page === total ? total : page + 1;
+        // console.log(offset);
+        // console.log(result);
+        // console.log(total);
+        product
+          .getAllProductByStore(search, sortBy, sort, offset, limit, idUser)
+          .then((data) => {
+            let pageDetail = {
+              total: Math.ceil(total),
+              per_page: limit,
+              current_page: page,
+              totalPage: Math.ceil(total / limit),
+              nextLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + nextPage)}`,
+              prevLink: `http://localhost:4000${req.originalUrl.replace('page=' + page, 'page=' + prevPage)}`,
+            };
+            if (data[0] !== undefined) {
+              helper.responsePagination(res, 'OK', 200, false, pageDetail, data);
+            } else {
+              helper.responsePagination(res, err, 404, true, pageDetail, data);
+            }
+          })
+          .catch((error) => {
+            helper.response(res, null, 404, error);
+          });
       })
       .catch((error) => {
         helper.response(res, null, 404, error);
       });
   },
-
   getProductbyID: (req, res) => {
     const id = req.params.id;
     product
