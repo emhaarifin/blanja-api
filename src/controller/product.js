@@ -113,17 +113,21 @@ module.exports = {
         helper.response(res, null, 404, 'Not Found');
       });
   },
-  addProduct: (req, res) => {
+  addProduct: async (req, res) => {
     const data = {
       name: req.body.name,
       brand: req.body.brand,
       description: req.body.description,
       stock: req.body.stock,
       categoryId: req.body.categoryId,
-      image: `${process.env.BASE_URL}/file/${req.file.filename}`,
+      image: req.file,
       price: req.body.price,
       createdAt: new Date(),
     };
+    const uploader = async (path) => await cloudinary.uploads(path, 'Blanja');
+    const { path } = data.image;
+    const newPath = await uploader(path);
+    data.image = newPath.url;
     product
       .addProduct(data)
       .then(() => {
@@ -138,7 +142,7 @@ module.exports = {
         helper.response(res, err.message, null, 410);
       });
   },
-  updateProduct: (req, res) => {
+  updateProduct: async (req, res) => {
     const id = req.params.id;
     const data = {
       name: req.body.name,
@@ -151,26 +155,21 @@ module.exports = {
     };
 
     if (req.file) {
-      data.image = `${process.env.BASE_URL}/file/${req.file.filename}`;
-      product
-        .updateProduct(Number(id), data)
-        .then(() => {
-          helper.response(res, 'Success update data');
-        })
-        .catch((err) => {
-          helper.response(res, null, 404, err);
-        });
-      helper.response(res, 'Success update data');
-    } else {
-      product
-        .updateProduct(Number(id), data)
-        .then(() => {
-          helper.response(res, 'Success update data');
-        })
-        .catch((err) => {
-          helper.response(res, null, 404, err);
-        });
+      data.image = req.file;
+      const uploader = async (path) => await cloudinary.uploads(path, 'Blanja');
+      const { path } = data.image;
+      const newPath = await uploader(path);
+      data.image = newPath.url;
     }
+
+    product
+      .updateProduct(Number(id), data)
+      .then(() => {
+        helper.response(res, 'Success update data');
+      })
+      .catch((err) => {
+        helper.response(res, null, 404, err);
+      });
   },
 
   deleteProduct: (req, res) => {
