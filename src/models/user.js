@@ -35,9 +35,9 @@ module.exports = {
       });
     });
   },
-  findStore: (email) => {
+  findStore: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT * FROM stores WHERE user_id = ?`, email, (error, result) => {
+      connection.query(`SELECT * FROM stores WHERE user_id = "${id}"`, (error, result) => {
         if (!error) {
           resolve(result);
         } else {

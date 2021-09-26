@@ -228,7 +228,6 @@ module.exports = {
   updateProfile: async (req, res) => {
     const id = req.params.id;
     const data = {
-      email: req.body.email,
       phone_number: req.body.phone_number,
     };
     if (req.file) {
@@ -241,27 +240,25 @@ module.exports = {
 
     const checkStore = await users.findStore(id);
     if (checkStore.length > 0) {
-      console.log(checkStore);
-      const storeData = {
-        store_name: req.body.store_name,
-        store_description: req.body.store_description,
-      };
       users
-        .updateStoreUser(id, storeData)
+        .updateUser(id, data)
         .then(() => {
-          data.store_name = storeData.store_name;
-          data.store_description = storeData.store_description;
+          console.log(checkStore);
+          const storeData = {
+            store_name: req.body.store_name,
+            store_description: req.body.store_description,
+          };
           users
-            .updateUser(id, data)
+            .updateStoreUser(id, storeData)
             .then(() => {
-              helper.response(res, 'Succes Update Profile', 200);
+              return helper.response(res, 'Succes Update Profile', 200);
             })
             .catch((err) => {
-              helper.response(res, err.message, null, 401);
+              return helper.response(res, err.message, null, 400);
             });
         })
         .catch((err) => {
-          helper.response(res, err.message, null, 400);
+          return helper.response(res, err.message, null, 401);
         });
     } else {
       const profileUser = {
@@ -275,11 +272,11 @@ module.exports = {
       users
         .updateUser(id, data)
         .then(() => {
-          helper.response(res, 'Success Update Profile', 200);
+          return helper.response(res, 'Success Update Profile', 200);
         })
         .catch((err) => {
           console.log(req.body);
-          helper.response(res, err.message, null, 401);
+          return helper.response(res, err.message, null, 401);
         });
     }
   },
