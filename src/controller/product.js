@@ -2,6 +2,7 @@
 const product = require('../models/product');
 const helper = require('../helper/response');
 const path = require('path');
+const cloudinary = require('../middleware/cloudinary');
 const fs = require('fs');
 const dirPath = path.join(__dirname, '../../../uploads');
 

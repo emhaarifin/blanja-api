@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const helper = require('../helper/response');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('../middleware/cloudinary');
 // const user = require("../../models/v2/user");
 
 module.exports = {
@@ -232,6 +233,13 @@ module.exports = {
       email: req.body.email,
       phone_number: req.body.phone_number,
     };
+    if (req.file) {
+      data.avatar = req.file;
+      const uploader = async (path) => await cloudinary.uploads(path, 'Blanja');
+      const { path } = data.avatar;
+      const newPath = await uploader(path);
+      data.avatar = newPath.url;
+    }
 
     const checkStore = await users.findStore(id);
     if (checkStore.length > 0) {
