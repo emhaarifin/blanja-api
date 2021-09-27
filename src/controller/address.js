@@ -6,7 +6,6 @@ module.exports = {
   createAddress: (req, res) => {
     const { id_user, name_address, name_recipient, phone_recipient, address, postal_code, city, primary_address } =
       req.body;
-
     const data = {
       id_user,
       name_address,
