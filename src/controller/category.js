@@ -7,11 +7,11 @@ module.exports = {
     category
       .getAllCategory()
       .then((result) => {
-        helper.response(res, 'OK', result);
+        helper.response(res, 'OK', result, 200);
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, 'Data Not Found');
+        helper.response(res, err.message, null, 404);
       });
   },
   getCategorybyID: (req, res) => {
