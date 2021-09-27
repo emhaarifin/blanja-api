@@ -1,7 +1,7 @@
 <h1 align="center">Ecommerce API</h1>
 
 <p align="center">
-    <a href="https://bit.ly/blanja-netlify" target="_blank">View Demo</a>
+    <a href="https://bit.ly/blanja_react" target="_blank">View Demo</a>
     ·
     <a href="https://github.com/emhaarifin/ecommerce-api/issues" target="_blank">Report Bug</a>
     ·
