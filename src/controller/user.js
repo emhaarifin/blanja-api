@@ -212,13 +212,13 @@ module.exports = {
             .getStoreData(id)
             .then((data) => {
               result[0].StoreData = data;
-              helper.response(res, 'ok', result);
+              helper.response(res, 'ok', result, 200);
             })
             .catch((err) => {
               helper.response(res, err.message, null, 404);
             });
         } else {
-          helper.response(res, 'ok', result);
+          helper.response(res, 'ok', result, 200);
         }
       })
       .catch((err) => {
@@ -226,7 +226,7 @@ module.exports = {
       });
   },
   updateProfile: async (req, res) => {
-    const id = req.params.id;
+    const id = req.id;
     const data = {
       phone_number: req.body.phone_number,
     };
@@ -243,7 +243,6 @@ module.exports = {
       users
         .updateUser(id, data)
         .then(() => {
-          console.log(checkStore);
           const storeData = {
             store_name: req.body.store_name,
             store_description: req.body.store_description,
@@ -261,21 +260,15 @@ module.exports = {
           return helper.response(res, err.message, null, 401);
         });
     } else {
-      const profileUser = {
-        name: req.body.name,
-        gender: req.body.gender,
-        date_of_birth: new Date(),
-      };
-      data.name = profileUser.name;
-      data.gender = profileUser.gender;
-      data.date_of_birth = profileUser.date_of_birth;
+      data.name = req.body.name;
+      data.gender = req.body.gender;
+      data.date_of_birth = req.body.date_of_birth;
       users
         .updateUser(id, data)
         .then(() => {
           return helper.response(res, 'Success Update Profile', 200);
         })
         .catch((err) => {
-          console.log(req.body);
           return helper.response(res, err.message, null, 401);
         });
     }

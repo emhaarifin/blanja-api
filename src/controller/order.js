@@ -5,17 +5,20 @@ const helper = require('../helper/response');
 
 module.exports = {
   getOrder: (req, res) => {
+    const id = req.id;
+    console.log(id);
     const search = req.query.search || '';
     const sortBy = req.query.sortBy || 'id';
     const sort = req.query.sort || 'ASC';
     order
-      .getAllOrder(search, sortBy, sort)
+      .getAllOrder(search, id, sortBy, sort)
       .then((result) => {
-        helper.response(res, result);
+        console.log(result.length);
+        helper.response(res, 'sukses', result, 200);
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, err);
+        helper.response(res, err.message, null, 404);
       });
   },
   getOrderbyID: (req, res) => {
@@ -23,35 +26,39 @@ module.exports = {
     order
       .getOrderbyID(Number(id))
       .then((result) => {
-        helper.response(res, result);
+        helper.response(res, 'ok', result, 200);
       })
       .catch((err) => {
         console.log(err);
         helper.response(res, null, 404, err);
       });
   },
-  addOrder: (req, res) => {
-    const data = {
-      status_order: req.body.status_order,
-      buyerName: req.body.buyerName,
-      productId: req.body.productId,
-      categoryId: req.body.categoryId,
-    };
-    order
-      .addOrder(data)
-      .then(() => {
-        helper.response(res, 'Succes input order', data, 200);
-        // console.log(result);
-      })
-      .catch((error) => {
-        helper.response(res, 'Error input order', null, 410);
-        console.log(error);
+  addOrder: async (req, res) => {
+    try {
+      const id = req.id;
+      const { dataOrder, payment_method } = req.body;
+      await dataOrder.map(async (item) => {
+        const data = {
+          qty: item.qty,
+          status: 'Not yet paid',
+          total: item.qty * item.price,
+          user_id: id,
+          category_id: item.categoryId,
+          product_id: item.id,
+          payment_method,
+        };
+        await order.addOrder(data);
       });
+      return helper.response(res, 'Succes input order', 200);
+    } catch (error) {
+      console.log(error);
+      return helper.response(res, error, null, 410);
+    }
   },
   updateOrder: (req, res) => {
     const id = req.params.id;
     const data = {
-      status_order: req.body.status_order,
+      status: req.body.status,
     };
     order
       .updateOrder(Number(id), data)
@@ -72,7 +79,7 @@ module.exports = {
       })
       .catch((err) => {
         console.log(err);
-        helper.response(res, null, 404, 'Id order for delete No found');
+        helper.response(res, err.message, null, 404);
       });
   },
 };

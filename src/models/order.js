@@ -2,11 +2,11 @@
 const connection = require('../confiq/db');
 
 module.exports = {
-  getAllOrder: (search, sortBy, sort) => {
+  getAllOrder: (search, id, sortBy, sort) => {
     return new Promise((resolve, reject) => {
       // connection.query(`SELECT id, categoryName as category, image FROM category`, (error, result) => {
       connection.query(
-        `SELECT o.*, c.categoryName as category, p.name FROM orders o INNER JOIN category c ON c.id = o.categoryId INNER JOIN products p ON p.id = o.productId WHERE o.buyerName LIKE CONCAT('%',?,'%') ORDER BY ${sortBy} ${sort}`,
+        `SELECT o.*, c.categoryName as category, p.name FROM orders o INNER JOIN category c ON c.id = o.category_id INNER JOIN products p ON p.id = o.product_id WHERE o.status LIKE CONCAT ("%",?,"%") AND o.user_id LIKE CONCAT ("%","${id}","%") ORDER BY ${sortBy} ${sort}`,
         search,
         (error, result) => {
           if (!error) {
@@ -21,7 +21,7 @@ module.exports = {
   getOrderbyID: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT o.*, c.categoryName as category, p.name FROM orders o INNER JOIN category c ON c.id = o.categoryId INNER JOIN products p ON p.id = o.productId WHERE o.ID = ?`,
+        `SELECT o.*, c.categoryName as category, p.name FROM orders o INNER JOIN category c ON c.id = o.category_id INNER JOIN products p ON p.id = o.product_id WHERE o.id = ?`,
         id,
         (error, result) => {
           if (!error) {
@@ -35,7 +35,7 @@ module.exports = {
   },
   addOrder: (data) => {
     return new Promise((resolve, reject) => {
-      connection.query(`INSERT INTO order_seller set ?`, data, (error, result) => {
+      connection.query(`INSERT INTO orders set ?`, data, (error, result) => {
         if (!error) {
           resolve(result);
         } else {
@@ -46,7 +46,7 @@ module.exports = {
   },
   updateOrder: (id, data) => {
     return new Promise((resolve, reject) => {
-      connection.query('UPDATE order_seller o SET ? WHERE o.id = ?', [data, id], (error, result) => {
+      connection.query('UPDATE orders o SET ? WHERE o.id = ?', [data, id], (error, result) => {
         if (!error) {
           resolve(result);
         } else {

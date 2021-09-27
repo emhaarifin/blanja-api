@@ -6,22 +6,14 @@ const cors = require('cors');
 const route = require('./src/route');
 const express = require('express');
 const logger = require('morgan');
-
-const port = process.env.PORT;
 const app = express();
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000',
-  })
-);
+const port = process.env.PORT;
+
+app.use(cors());
+app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(logger('dev'));
-
-app.listen(port, () => {
-  console.log('server on using port', port);
-});
 
 app.use('/', route);
 app.use('/file', express.static('./uploads'));
@@ -37,6 +29,10 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     message: err.message || 'internal server Error',
   });
+});
+
+app.listen(port, () => {
+  console.log('server on using port', port);
 });
 
 module.exports = app;

@@ -105,7 +105,6 @@ module.exports = {
     product
       .getProductbyID(id)
       .then((result) => {
-        client.setex(`product/${id}`, 60 * 60, JSON.stringify(result));
         helper.response(res, 'ok', result);
       })
       .catch(() => {
