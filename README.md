@@ -1,3 +1,6 @@
+<p align="center">
+   <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg">
+</p>
 <h1 align="center">Ecommerce API</h1>
 
 <p align="center">
