@@ -1,3 +1,6 @@
+<p align="center">
+   <img src="https://res.cloudinary.com/dnv-images/image/upload/v1631599120/Blanja%20com/blanja_pdgveq.svg">
+</p>
 <h1 align="center">Ecommerce API</h1>
 
 <p align="center">
@@ -42,7 +45,7 @@
 
 ## About The Project
 
-<b>Blanja</b> is an online shop that currently focuses on the fashion market. Allows sellers to market their fashion products and customers can buy the best and cheap fashion needs.
+<b>Blanja</b> is an online store that currently focuses on the fashion market. sellers can promote their products and customers can buy what they need.
 
 ### Build With
 * [Express Js](https://expressjs.com/)
