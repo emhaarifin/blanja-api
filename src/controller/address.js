@@ -16,6 +16,14 @@ module.exports = {
       created_at: new Date(),
     };
 
+    const { name_address, name_recipient, phone_recipient, address, postal_code, city } = data;
+    if (!name_address) return helper.response(res, "Name Address can't be null!", null, 400);
+    if (!name_recipient) return helper.response(res, "Name Recipient can't be null!", null, 400);
+    if (!phone_recipient) return helper.response(res, "Phone can't be null!", null, 400);
+    if (!address) return helper.response(res, "Address can't be null!", null, 400);
+    if (!postal_code) return helper.response(res, "Postal Code can't be null!", null, 400);
+    if (!city) return helper.response(res, "City can't be null!", null, 400);
+
     await address
       .createAddress(data)
       .then(() => {
