@@ -7,7 +7,7 @@ const router = express.Router();
 
 router
   .post('/', auth.verifyAccess, address.createAddress)
-  .get('/:id', auth.verifyAccess, address.getItemAddress)
+  .get('/', auth.verifyAccess, address.getItemAddress)
   .post('/:id', auth.verifyAccess, address.updateAddress);
 
 module.exports = router;

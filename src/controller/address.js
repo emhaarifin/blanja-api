@@ -3,21 +3,20 @@ const address = require('../models/address');
 const helper = require('../helper/response');
 
 module.exports = {
-  createAddress: (req, res) => {
-    const { id_user, name_address, name_recipient, phone_recipient, address, postal_code, city, primary_address } =
-      req.body;
+  createAddress: async (req, res) => {
     const data = {
-      id_user,
-      name_address,
-      name_recipient,
-      phone_recipient,
-      address,
-      postal_code,
-      city,
-      primary_address: primary_address ? primary_address : null,
+      id_user: req.body.id_user,
+      name_address: req.body.name_address,
+      name_recipient: req.body.name_recipient,
+      phone_recipient: req.body.phone_recipient,
+      address: req.body.address,
+      postal_code: req.body.postal_code,
+      city: req.body.city,
+      primary_address: req.body.primary_address ? req.body.primary_address : null,
       created_at: new Date(),
     };
-    address
+
+    await address
       .createAddress(data)
       .then(() => {
         helper.response(res, 'Sukses', data, 200);
@@ -27,7 +26,7 @@ module.exports = {
       });
   },
   getItemAddress: (req, res) => {
-    const id = req.params.id;
+    const id = req.id;
     address
       .getItemAddress(id)
       .then((result) => {
